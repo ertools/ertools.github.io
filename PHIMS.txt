@@ -1,0 +1,19 @@
+I wan to create a Laravel, MySQL bootstrap (local) web application for this.
+It is a health information management system. Home page is a login page, admin dashboard as follows .
+top has common navigation bar. left side has left panel with menu items as follows. 
+1. Overview of all with links
+2. Hierarchy management - in this section for  we can arrange create and arrange institutions parent - child method. 
+
+3 - Units Templates - Static list just for display ( General medical clinic (GMC) , Dental clinic (DC), General inward (GI), General Pharmacy (GP), Office )
+
+3. Views Templates - Static list just for display ( GMC- Doctor view, GMC- clark view, GMC- nurse view , DC- doctor view .... like wise for all units )
+
+4. Units management - In this section has two pannel leftside shows institutions hierachy list when click on a institution right side pannel shows to add units to that institution ( ex - DC - akurana .. ) when creating a clinic ask the type of the clinic ( from unit templates ) 
+
+5. Views Management - IN this section has 3 pannels left side institution when select shows its units in middle section, when select a unit right side section for create views that can assign to the unit ( ex - Akuranara(institution) -> DC Akurana (unit) -> DC doctor view, DC nurse view as views for that unit).
+ 
+6. User management - In here we can create user accounts and assign them to a institution , multiple units of that institution, multiple views ( from the list which created above)
+
+7. System management - for general admin configurations
+
+As a doctor of a institution(ex- akurana) when I login , if I assign to a unit ( ex- GMC Akurana) and assign to a view template ( ex- GMC Doctor view) , just open a separate page called GMC Doctor view - GMC Akurana , for now just label the page called GMC - Doctor view page , also create separate pages for all  unit templates in section 3 will develop in future , all the templates will have several pages . 
