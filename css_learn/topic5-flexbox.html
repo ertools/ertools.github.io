@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 5: Flexbox Layout</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Live Flex Demos */
+    .flex-demo { border: 2px dashed #d1d5db; border-radius: 10px; padding: 16px; margin: 1.5em 0; background: #f9fafb; }
+    .demo-label { font-size: 0.78em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .flex-box { display: flex; gap: 10px; }
+    .flex-item { background: #667eea; color: white; padding: 14px 20px; border-radius: 8px; font-weight: 700; font-size: 0.9em; }
+    .flex-item-sm { background: #764ba2; color: white; padding: 10px 14px; border-radius: 8px; font-weight: 700; font-size: 0.85em; }
+
+    .flex-row    { flex-direction: row; }
+    .flex-col    { flex-direction: column; }
+    .flex-wrap   { flex-wrap: wrap; }
+    .jc-start    { justify-content: flex-start; }
+    .jc-center   { justify-content: center; }
+    .jc-end      { justify-content: flex-end; }
+    .jc-between  { justify-content: space-between; }
+    .jc-around   { justify-content: space-around; }
+    .ai-start    { align-items: flex-start; min-height: 90px; }
+    .ai-center   { align-items: center; min-height: 90px; }
+    .ai-end      { align-items: flex-end; min-height: 90px; }
+    .ai-stretch  { align-items: stretch; min-height: 90px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Flexbox Layout</h1>
+
+    <div class="intro-text">
+        Flexbox is a one-dimensional layout system — it works along either a row or a column. It is the perfect tool for navigation bars, card rows, centered content, and any time you need to distribute space between items or align them within a container.
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">Container vs. Items</div>
+        <p>Flexbox has two actors: the <strong>flex container</strong> (the parent you set <code>display: flex</code> on) and <strong>flex items</strong> (the direct children). Container properties control the axis, wrapping, and alignment of all items; item properties control individual sizing and ordering.</p>
+    </div>
+
+    <h2>Enabling Flexbox</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Activating Flex</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">display</span>: <span class="value">flex</span>;       <span class="comment">/* or inline-flex for inline context */</span>
+}</code>
+    </div>
+
+    <div class="flex-demo">
+        <div class="demo-label">display: flex — items sit side by side automatically</div>
+        <div class="flex-box flex-row">
+            <div class="flex-item">Item 1</div>
+            <div class="flex-item">Item 2</div>
+            <div class="flex-item">Item 3</div>
+        </div>
+    </div>
+
+    <h2>flex-direction</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — flex-direction</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">flex-direction</span>: <span class="value">row</span>;             <span class="comment">/* default: left → right */</span>
+    <span class="property">flex-direction</span>: <span class="value">row-reverse</span>;     <span class="comment">/* right → left */</span>
+    <span class="property">flex-direction</span>: <span class="value">column</span>;          <span class="comment">/* top → bottom */</span>
+    <span class="property">flex-direction</span>: <span class="value">column-reverse</span>; <span class="comment">/* bottom → top */</span>
+}</code>
+    </div>
+
+    <div class="flex-demo">
+        <div class="demo-label">flex-direction: column</div>
+        <div class="flex-box flex-col" style="width:160px;">
+            <div class="flex-item-sm">Item 1</div>
+            <div class="flex-item-sm">Item 2</div>
+            <div class="flex-item-sm">Item 3</div>
+        </div>
+    </div>
+
+    <h2>justify-content (main axis)</h2>
+
+    <div class="flex-demo">
+        <div class="demo-label">justify-content: flex-start</div>
+        <div class="flex-box jc-start"><div class="flex-item-sm">A</div><div class="flex-item-sm">B</div><div class="flex-item-sm">C</div></div>
+    </div>
+    <div class="flex-demo">
+        <div class="demo-label">justify-content: center</div>
+        <div class="flex-box jc-center"><div class="flex-item-sm">A</div><div class="flex-item-sm">B</div><div class="flex-item-sm">C</div></div>
+    </div>
+    <div class="flex-demo">
+        <div class="demo-label">justify-content: space-between</div>
+        <div class="flex-box jc-between"><div class="flex-item-sm">A</div><div class="flex-item-sm">B</div><div class="flex-item-sm">C</div></div>
+    </div>
+    <div class="flex-demo">
+        <div class="demo-label">justify-content: space-around</div>
+        <div class="flex-box jc-around"><div class="flex-item-sm">A</div><div class="flex-item-sm">B</div><div class="flex-item-sm">C</div></div>
+    </div>
+
+    <h2>align-items (cross axis)</h2>
+
+    <div class="flex-demo">
+        <div class="demo-label">align-items: flex-start</div>
+        <div class="flex-box ai-start"><div class="flex-item">Tall</div><div class="flex-item-sm" style="padding:6px 12px;">Short</div><div class="flex-item">Tall</div></div>
+    </div>
+    <div class="flex-demo">
+        <div class="demo-label">align-items: center</div>
+        <div class="flex-box ai-center"><div class="flex-item">Tall</div><div class="flex-item-sm" style="padding:6px 12px;">Short</div><div class="flex-item">Tall</div></div>
+    </div>
+    <div class="flex-demo">
+        <div class="demo-label">align-items: flex-end</div>
+        <div class="flex-box ai-end"><div class="flex-item">Tall</div><div class="flex-item-sm" style="padding:6px 12px;">Short</div><div class="flex-item">Tall</div></div>
+    </div>
+
+    <h2>flex-wrap</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Wrapping</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">flex-wrap</span>: <span class="value">nowrap</span>;   <span class="comment">/* default — items shrink to fit */</span>
+    <span class="property">flex-wrap</span>: <span class="value">wrap</span>;     <span class="comment">/* items wrap to next line */</span>
+}</code>
+    </div>
+
+    <div class="flex-demo">
+        <div class="demo-label">flex-wrap: wrap — items flow onto next row</div>
+        <div class="flex-box flex-wrap" style="max-width:320px;">
+            <div class="flex-item-sm">Alpha</div>
+            <div class="flex-item-sm">Beta</div>
+            <div class="flex-item-sm">Gamma</div>
+            <div class="flex-item-sm">Delta</div>
+            <div class="flex-item-sm">Epsilon</div>
+        </div>
+    </div>
+
+    <h2>gap</h2>
+    <p>The <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">gap</code> property adds space between flex items without adding margin to the first or last item — cleaner than margins for most layouts.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — gap</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">gap</span>: <span class="value">16px</span>;          <span class="comment">/* row and column gap equal */</span>
+    <span class="property">gap</span>: <span class="value">16px 24px</span>;    <span class="comment">/* row-gap | column-gap */</span>
+    <span class="property">row-gap</span>: <span class="value">16px</span>;
+    <span class="property">column-gap</span>: <span class="value">24px</span>;
+}</code>
+    </div>
+
+    <h2>Flex Item Properties</h2>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Property</th><th>Default</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>flex-grow</code></td><td>0</td><td>How much to grow relative to siblings</td></tr>
+                <tr><td><code>flex-shrink</code></td><td>1</td><td>How much to shrink when space is short</td></tr>
+                <tr><td><code>flex-basis</code></td><td>auto</td><td>Starting size before grow/shrink</td></tr>
+                <tr><td><code>flex</code></td><td>0 1 auto</td><td>Shorthand for grow shrink basis</td></tr>
+                <tr><td><code>align-self</code></td><td>auto</td><td>Override align-items for this item</td></tr>
+                <tr><td><code>order</code></td><td>0</td><td>Visual reordering (lower = earlier)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Flex Item Sizing</div>
+        <code><span class="comment">/* Equal width columns that grow to fill space */</span>
+<span class="selector">.col</span> { <span class="property">flex</span>: <span class="value">1</span>; }
+
+<span class="comment">/* Fixed sidebar + growing main content */</span>
+<span class="selector">.sidebar</span> { <span class="property">flex</span>: <span class="value">0 0 260px</span>; }   <span class="comment">/* don't grow, don't shrink, 260px */</span>
+<span class="selector">.main</span>    { <span class="property">flex</span>: <span class="value">1</span>; }           <span class="comment">/* take all remaining space */</span>
+
+<span class="comment">/* Override alignment for one item */</span>
+<span class="selector">.special</span> { <span class="property">align-self</span>: <span class="value">flex-end</span>; }
+
+<span class="comment">/* Visual reorder without changing HTML */</span>
+<span class="selector">.logo</span>  { <span class="property">order</span>: <span class="value">-1</span>; }  <span class="comment">/* appears first */</span>
+<span class="selector">.badge</span> { <span class="property">order</span>: <span class="value">2</span>; }   <span class="comment">/* appears last */</span></code>
+    </div>
+
+    <h2>Perfect Centering with Flexbox</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Centering Patterns</div>
+        <code><span class="comment">/* Horizontally and vertically centre a child */</span>
+<span class="selector">.parent</span> {
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">justify-content</span>: <span class="value">center</span>;
+    <span class="property">align-items</span>: <span class="value">center</span>;
+    <span class="property">min-height</span>: <span class="value">100vh</span>;
+}
+
+<span class="comment">/* Navigation bar — logo left, links right */</span>
+<span class="selector">.navbar</span> {
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">align-items</span>: <span class="value">center</span>;
+}
+<span class="selector">.navbar .links</span> { <span class="property">margin-left</span>: <span class="value">auto</span>; }  <span class="comment">/* push links to far right */</span></code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">margin: auto in Flex</div>
+        <p>Setting <code style="background:#fff;padding:2px 6px;border-radius:3px;">margin-left: auto</code> on a flex item consumes all available space to its left — a very powerful trick for pushing the item to the right end of the row.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>Flexbox — <code>display: flex</code>, <code>flex-direction</code>, <code>justify-content</code>, <code>align-items</code>, <code>gap</code>, and the item properties — gives you a simple, readable way to build one-dimensional layouts. It is the best tool for navbars, card rows, and centring content.</p>
+        <p>Next: <strong>CSS Grid</strong> — the two-dimensional layout system for building full page structures.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

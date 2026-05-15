@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 6: CSS Grid Layout</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Grid demos */
+    .grid-demo { background: #f9fafb; border: 2px dashed #d1d5db; border-radius: 10px; padding: 16px; margin: 1.5em 0; }
+    .demo-label { font-size: 0.78em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .g-item { background: #667eea; color: white; padding: 18px; border-radius: 8px; font-weight: 700; text-align: center; font-size: 0.9em; }
+    .g-item:nth-child(2n) { background: #764ba2; }
+
+    .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .g2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+    .gauto { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+
+    /* Named areas demo */
+    .g-layout {
+        display: grid;
+        grid-template-areas:
+            "header header header"
+            "sidebar main main"
+            "footer footer footer";
+        grid-template-columns: 180px 1fr 1fr;
+        gap: 10px;
+    }
+    .g-header  { grid-area: header;  background: #667eea; }
+    .g-sidebar { grid-area: sidebar; background: #764ba2; min-height: 60px; }
+    .g-main    { grid-area: main;    background: #10b981; }
+    .g-footer  { grid-area: footer;  background: #f59e0b; color: #1a202c; }
+    .g-layout .g-item { font-size: 0.82em; padding: 14px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 600px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+        .g-layout { grid-template-areas: "header" "sidebar" "main" "footer"; grid-template-columns: 1fr; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>CSS Grid Layout</h1>
+
+    <div class="intro-text">
+        CSS Grid is a <strong>two-dimensional</strong> layout system — it works with both rows and columns simultaneously. While Flexbox is great for one-directional flows, Grid excels at full page layouts, image galleries, and any design that needs to align content on both axes at once.
+    </div>
+
+    <h2>Enabling Grid</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Activating Grid</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+}</code>
+    </div>
+
+    <h2>Defining Columns and Rows</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — grid-template-columns &amp; rows</div>
+        <code><span class="comment">/* Three equal columns */</span>
+<span class="selector">.container</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+    <span class="property">grid-template-columns</span>: <span class="value">1fr 1fr 1fr</span>;
+}
+
+<span class="comment">/* Shorthand with repeat() */</span>
+<span class="selector">.container</span> {
+    <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;
+}
+
+<span class="comment">/* Mixed widths */</span>
+<span class="selector">.container</span> {
+    <span class="property">grid-template-columns</span>: <span class="value">200px 1fr 2fr</span>;
+}
+
+<span class="comment">/* Define rows */</span>
+<span class="selector">.container</span> {
+    <span class="property">grid-template-rows</span>: <span class="value">80px auto 60px</span>;
+}</code>
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">The fr Unit</div>
+        <p><code>fr</code> stands for "fraction of available space." <code>1fr 2fr</code> creates two columns where the second is twice as wide as the first. After fixed sizes (px, auto) are resolved, <code>fr</code> columns split the remaining space proportionally.</p>
+    </div>
+
+    <div class="grid-demo">
+        <div class="demo-label">repeat(3, 1fr) — three equal columns</div>
+        <div class="g3">
+            <div class="g-item">1</div><div class="g-item">2</div><div class="g-item">3</div>
+            <div class="g-item">4</div><div class="g-item">5</div><div class="g-item">6</div>
+        </div>
+    </div>
+
+    <div class="grid-demo">
+        <div class="demo-label">2fr 1fr — sidebar layout</div>
+        <div class="g2-1">
+            <div class="g-item">Main Content (2fr)</div>
+            <div class="g-item">Sidebar (1fr)</div>
+        </div>
+    </div>
+
+    <h2>gap</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — gap</div>
+        <code><span class="selector">.container</span> {
+    <span class="property">gap</span>: <span class="value">20px</span>;         <span class="comment">/* row and column gap */</span>
+    <span class="property">gap</span>: <span class="value">16px 24px</span>;   <span class="comment">/* row-gap | column-gap */</span>
+}</code>
+    </div>
+
+    <h2>Placing Items</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — grid-column &amp; grid-row</div>
+        <code><span class="comment">/* Span across multiple columns or rows */</span>
+<span class="selector">.featured</span> {
+    <span class="property">grid-column</span>: <span class="value">1 / 3</span>;   <span class="comment">/* start at line 1, end at line 3 */</span>
+    <span class="property">grid-column</span>: <span class="value">span 2</span>;  <span class="comment">/* shorthand: span 2 columns */</span>
+    <span class="property">grid-row</span>: <span class="value">span 2</span>;     <span class="comment">/* span 2 rows */</span>
+}
+
+<span class="comment">/* Place at a specific cell */</span>
+<span class="selector">.logo</span> {
+    <span class="property">grid-column</span>: <span class="value">1</span>;
+    <span class="property">grid-row</span>: <span class="value">1</span>;
+}</code>
+    </div>
+
+    <h2>Named Grid Areas</h2>
+    <p>Grid areas let you build page layouts with readable, visual template strings — no line numbers needed.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — grid-template-areas</div>
+        <code><span class="selector">.layout</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+    <span class="property">grid-template-areas</span>:
+        <span class="value">"header  header  header"</span>
+        <span class="value">"sidebar main    main"</span>
+        <span class="value">"footer  footer  footer"</span>;
+    <span class="property">grid-template-columns</span>: <span class="value">200px 1fr 1fr</span>;
+    <span class="property">gap</span>: <span class="value">16px</span>;
+}
+
+<span class="selector">.header</span>  { <span class="property">grid-area</span>: <span class="value">header</span>; }
+<span class="selector">.sidebar</span> { <span class="property">grid-area</span>: <span class="value">sidebar</span>; }
+<span class="selector">.main</span>    { <span class="property">grid-area</span>: <span class="value">main</span>; }
+<span class="selector">.footer</span>  { <span class="property">grid-area</span>: <span class="value">footer</span>; }</code>
+    </div>
+
+    <div class="grid-demo">
+        <div class="demo-label">Named areas — classic page layout</div>
+        <div class="g-layout">
+            <div class="g-item g-header">Header</div>
+            <div class="g-item g-sidebar">Sidebar</div>
+            <div class="g-item g-main">Main Content</div>
+            <div class="g-item g-footer">Footer</div>
+        </div>
+    </div>
+
+    <h2>auto-fit &amp; auto-fill with minmax()</h2>
+    <p>This is one of the most powerful Grid techniques — a responsive column layout with <em>no media queries at all</em>.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Responsive Grid Without Media Queries</div>
+        <code><span class="selector">.cards</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+    <span class="property">grid-template-columns</span>: <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;
+    <span class="property">gap</span>: <span class="value">20px</span>;
+}
+
+<span class="comment">/* auto-fit:  empty tracks collapse */</span>
+<span class="comment">/* auto-fill: empty tracks are kept */</span>
+<span class="comment">/* minmax(200px, 1fr): each column min 200px, max fills equally */</span></code>
+    </div>
+
+    <div class="grid-demo">
+        <div class="demo-label">auto-fit + minmax(120px, 1fr) — resize the window to see it respond</div>
+        <div class="gauto">
+            <div class="g-item">Card</div><div class="g-item">Card</div>
+            <div class="g-item">Card</div><div class="g-item">Card</div>
+            <div class="g-item">Card</div>
+        </div>
+    </div>
+
+    <h2>Alignment in Grid</h2>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Property</th><th>Applied To</th><th>Aligns</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>justify-items</code></td><td>Container</td><td>Items horizontally within their cell</td></tr>
+                <tr><td><code>align-items</code></td><td>Container</td><td>Items vertically within their cell</td></tr>
+                <tr><td><code>justify-content</code></td><td>Container</td><td>Entire grid horizontally in container</td></tr>
+                <tr><td><code>align-content</code></td><td>Container</td><td>Entire grid vertically in container</td></tr>
+                <tr><td><code>justify-self</code></td><td>Item</td><td>Individual item horizontally</td></tr>
+                <tr><td><code>align-self</code></td><td>Item</td><td>Individual item vertically</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Grid vs Flexbox — When to Use Which</div>
+        <p><strong>Use Flexbox</strong> when you have a single row or column of items and want them to share space naturally. <strong>Use Grid</strong> when you need to control both rows and columns simultaneously, or when you are building a macro page layout. They are complementary — use both in the same project.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>CSS Grid — <code>grid-template-columns</code>, <code>fr</code> units, named areas, <code>auto-fit</code> with <code>minmax()</code> — gives you a declarative, readable two-dimensional layout system that is difficult to replicate with any other approach.</p>
+        <p>Next: <strong>Transitions &amp; Animations</strong> — adding motion and life to your designs.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

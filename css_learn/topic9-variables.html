@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 9: CSS Variables &amp; Custom Properties</title>
+<style>
+    /* ── Design token system using CSS variables ── */
+    :root {
+        --color-primary:    #667eea;
+        --color-primary-dark: #4f46e5;
+        --color-secondary:  #764ba2;
+        --color-accent:     #10b981;
+        --color-warn:       #f59e0b;
+        --color-danger:     #ef4444;
+        --color-text:       #2c3e50;
+        --color-muted:      #4b5563;
+        --color-subtle:     #94a3b8;
+        --color-surface:    #f8f9fa;
+        --color-border:     #e5e7eb;
+
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --radius-xl: 20px;
+
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+
+        --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+        --space-4: 16px; --space-5: 20px; --space-6: 24px;
+        --space-8: 32px; --space-10: 40px;
+
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --font-mono: 'Courier New', Courier, monospace;
+    }
+
+    .post-content { font-family: var(--font-sans); line-height: 1.8; color: var(--color-text); max-width: 860px; margin: 0 auto; padding: var(--space-10) var(--space-6); }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: var(--color-text); font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid var(--color-primary); }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: var(--color-surface); padding: var(--space-5); border-left: 4px solid var(--color-primary); margin: 1.5em 0; border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+    .code-container { background: #1e293b; border-radius: var(--radius-md); padding: var(--space-5); margin: 1.5em 0; overflow-x: auto; box-shadow: var(--shadow-md); }
+    .code-header { color: var(--color-subtle); font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: var(--font-mono); font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: var(--radius-md); padding: var(--space-5); margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid var(--color-accent); border-radius: var(--radius-md); padding: var(--space-5); margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid var(--color-warn); border-radius: var(--radius-md); padding: var(--space-5); margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: var(--color-muted); }
+    .post-content p { margin-bottom: 1.2em; color: var(--color-muted); }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid var(--color-border); color: var(--color-muted); }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9em; color: var(--color-danger); }
+
+    /* Token display */
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-3); margin: 1.5em 0; }
+    .token-chip { border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .chip-swatch { height: 48px; }
+    .chip-info { background: white; padding: 8px 10px; }
+    .chip-name { font-size: 0.75em; font-weight: 700; color: #374151; display: block; }
+    .chip-val  { font-size: 0.7em; font-family: var(--font-mono); color: #9ca3af; }
+
+    /* Theme demo */
+    .theme-demo { border-radius: var(--radius-lg); padding: var(--space-6); margin: 1.5em 0; transition: background 0.4s, color 0.4s; }
+    .theme-light { --demo-bg: white; --demo-card: #f9fafb; --demo-text: #1f2937; --demo-muted: #6b7280; --demo-border: #e5e7eb; }
+    .theme-dark  { --demo-bg: #0f172a; --demo-card: #1e293b; --demo-text: #e2e8f0; --demo-muted: #94a3b8; --demo-border: #334155; }
+    .theme-demo  { background: var(--demo-bg); border: 2px solid var(--demo-border); }
+    .demo-card   { background: var(--demo-card); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); }
+    .demo-title  { color: var(--demo-text); font-weight: 700; font-size: 1em; margin: 0 0 4px; }
+    .demo-sub    { color: var(--demo-muted); font-size: 0.85em; margin: 0; }
+
+    .theme-btns { display: flex; gap: 10px; margin-bottom: var(--space-4); }
+    .t-btn { padding: 8px 16px; border-radius: var(--radius-md); border: none; font-weight: 600; cursor: pointer; font-size: 0.88em; }
+    .t-btn-light { background: #f3f4f6; color: #1f2937; }
+    .t-btn-dark  { background: #1e293b; color: #e2e8f0; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: var(--radius-md); padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>CSS Variables &amp; Custom Properties</h1>
+
+    <div class="intro-text">
+        CSS Custom Properties (commonly called "CSS variables") let you store values in named tokens and reuse them throughout your stylesheet. Change one variable and the update propagates everywhere — making design systems, themes, and maintenance dramatically easier.
+    </div>
+
+    <h2>Declaring and Using Variables</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Declaring Custom Properties</div>
+        <code><span class="comment">/* Declare in :root for global access */</span>
+<span class="selector">:root</span> {
+    <span class="property">--color-primary</span>: <span class="value">#667eea</span>;
+    <span class="property">--color-text</span>: <span class="value">#2c3e50</span>;
+    <span class="property">--spacing-md</span>: <span class="value">16px</span>;
+    <span class="property">--border-radius</span>: <span class="value">8px</span>;
+    <span class="property">--font-body</span>: <span class="value">'Inter', sans-serif</span>;
+    <span class="property">--shadow</span>: <span class="value">0 4px 6px rgba(0, 0, 0, 0.1)</span>;
+}
+
+<span class="comment">/* Use with var() */</span>
+<span class="selector">.button</span> {
+    <span class="property">background</span>: <span class="value">var(--color-primary)</span>;
+    <span class="property">padding</span>: <span class="value">var(--spacing-md) calc(var(--spacing-md) * 2)</span>;
+    <span class="property">border-radius</span>: <span class="value">var(--border-radius)</span>;
+    <span class="property">box-shadow</span>: <span class="value">var(--shadow)</span>;
+    <span class="property">font-family</span>: <span class="value">var(--font-body)</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+}</code>
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">Naming Convention</div>
+        <p>Custom property names must start with two dashes (<code>--</code>) and are <strong>case-sensitive</strong>. Common naming patterns include <code>--color-*</code>, <code>--space-*</code>, <code>--font-*</code>, and <code>--shadow-*</code> — mirroring design token conventions from tools like Figma and Style Dictionary.</p>
+    </div>
+
+    <h2>A Full Design Token System</h2>
+    <p>This page's entire visual design is driven by CSS variables defined in <code>:root</code>. Here's the colour palette:</p>
+
+    <div class="token-grid">
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-primary)"></div><div class="chip-info"><span class="chip-name">--color-primary</span><span class="chip-val">#667eea</span></div></div>
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-secondary)"></div><div class="chip-info"><span class="chip-name">--color-secondary</span><span class="chip-val">#764ba2</span></div></div>
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-accent)"></div><div class="chip-info"><span class="chip-name">--color-accent</span><span class="chip-val">#10b981</span></div></div>
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-warn)"></div><div class="chip-info"><span class="chip-name">--color-warn</span><span class="chip-val">#f59e0b</span></div></div>
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-danger)"></div><div class="chip-info"><span class="chip-name">--color-danger</span><span class="chip-val">#ef4444</span></div></div>
+        <div class="token-chip"><div class="chip-swatch" style="background:var(--color-text)"></div><div class="chip-info"><span class="chip-name">--color-text</span><span class="chip-val">#2c3e50</span></div></div>
+    </div>
+
+    <h2>Fallback Values</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Fallback with var()</div>
+        <code><span class="comment">/* Second argument to var() is the fallback */</span>
+<span class="selector">.element</span> {
+    <span class="property">color</span>: <span class="value">var(--color-primary, #667eea)</span>;
+}
+
+<span class="comment">/* Fallbacks can chain */</span>
+<span class="selector">.element</span> {
+    <span class="property">color</span>: <span class="value">var(--user-theme-color, var(--color-primary, blue))</span>;
+}</code>
+    </div>
+
+    <h2>Scoped Variables</h2>
+    <p>Variables can be declared on any element and will be inherited by its children — enabling component-level theming without touching global styles.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Component Scoping</div>
+        <code><span class="comment">/* Global default */</span>
+<span class="selector">:root</span> {
+    <span class="property">--btn-bg</span>: <span class="value">#667eea</span>;
+    <span class="property">--btn-color</span>: <span class="value">white</span>;
+}
+
+<span class="comment">/* Override per variant — no need for extra classes */</span>
+<span class="selector">.btn-danger</span>  { <span class="property">--btn-bg</span>: <span class="value">#ef4444</span>; }
+<span class="selector">.btn-success</span> { <span class="property">--btn-bg</span>: <span class="value">#10b981</span>; }
+<span class="selector">.btn-outline</span> {
+    <span class="property">--btn-bg</span>: <span class="value">transparent</span>;
+    <span class="property">--btn-color</span>: <span class="value">#667eea</span>;
+}
+
+<span class="comment">/* Shared implementation */</span>
+<span class="selector">.btn</span> {
+    <span class="property">background</span>: <span class="value">var(--btn-bg)</span>;
+    <span class="property">color</span>: <span class="value">var(--btn-color)</span>;
+    <span class="property">padding</span>: <span class="value">10px 20px</span>;
+    <span class="property">border-radius</span>: <span class="value">8px</span>;
+    <span class="property">border</span>: <span class="value">2px solid var(--btn-bg)</span>;
+}</code>
+    </div>
+
+    <h2>Dark Mode Theming</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Dark Mode via Variables</div>
+        <code><span class="selector">:root</span> {
+    <span class="property">--bg</span>:      <span class="value">white</span>;
+    <span class="property">--surface</span>: <span class="value">#f9fafb</span>;
+    <span class="property">--text</span>:    <span class="value">#1f2937</span>;
+    <span class="property">--muted</span>:   <span class="value">#6b7280</span>;
+    <span class="property">--border</span>:  <span class="value">#e5e7eb</span>;
+}
+
+<span class="comment">/* Automatic dark mode */</span>
+<span class="selector">@media</span> (<span class="property">prefers-color-scheme</span>: <span class="value">dark</span>) {
+    <span class="selector">:root</span> {
+        <span class="property">--bg</span>:      <span class="value">#0f172a</span>;
+        <span class="property">--surface</span>: <span class="value">#1e293b</span>;
+        <span class="property">--text</span>:    <span class="value">#e2e8f0</span>;
+        <span class="property">--muted</span>:   <span class="value">#94a3b8</span>;
+        <span class="property">--border</span>:  <span class="value">#334155</span>;
+    }
+}
+
+<span class="comment">/* Manual toggle via data attribute */</span>
+<span class="selector">[data-theme="dark"]</span> {
+    <span class="property">--bg</span>: <span class="value">#0f172a</span>;
+    <span class="comment">/* ... */</span>
+}</code>
+    </div>
+
+    <h3>Live Theme Switcher Demo</h3>
+    <p>The two cards below use the same CSS — only the scoped variables change:</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:1.5em 0;">
+        <div class="theme-demo theme-light">
+            <p style="font-weight:700;color:var(--demo-text);margin:0 0 12px;font-size:0.85em;text-transform:uppercase;letter-spacing:0.5px;">Light Theme</p>
+            <div class="demo-card"><p class="demo-title">Design System Card</p><p class="demo-sub">Consistent, readable layout</p></div>
+            <div class="demo-card"><p class="demo-title">Powered by CSS variables</p><p class="demo-sub">One system, two themes</p></div>
+        </div>
+        <div class="theme-demo theme-dark">
+            <p style="font-weight:700;color:var(--demo-text);margin:0 0 12px;font-size:0.85em;text-transform:uppercase;letter-spacing:0.5px;">Dark Theme</p>
+            <div class="demo-card"><p class="demo-title">Design System Card</p><p class="demo-sub">Consistent, readable layout</p></div>
+            <div class="demo-card"><p class="demo-title">Powered by CSS variables</p><p class="demo-sub">One system, two themes</p></div>
+        </div>
+    </div>
+
+    <h2>Using Variables with JavaScript</h2>
+
+    <div class="code-container">
+        <div class="code-header">JavaScript — Reading &amp; Writing CSS Variables</div>
+        <code><span class="comment">// Read a CSS variable</span>
+<span class="property">const</span> <span class="value">primary</span> = getComputedStyle(document.documentElement)
+    .getPropertyValue(<span class="value">'--color-primary'</span>).trim();
+
+<span class="comment">// Write / update a CSS variable at runtime</span>
+document.documentElement.style
+    .setProperty(<span class="value">'--color-primary'</span>, <span class="value">'#ef4444'</span>);
+
+<span class="comment">// Theme toggle</span>
+document.getElementById(<span class="value">'theme-btn'</span>).addEventListener(<span class="value">'click'</span>, () =&gt; {
+    document.documentElement.toggleAttribute(<span class="value">'data-theme'</span>, <span class="value">'dark'</span>);
+});</code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">CSS Variables vs Sass Variables</div>
+        <p>Sass variables (<code style="background:#fff;padding:2px 6px;border-radius:3px;">$primary: #667eea</code>) are compiled away at build time — they cannot be changed at runtime. CSS custom properties live in the browser and can be read and updated by JavaScript, making them essential for theming, animations, and user preferences.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>CSS Custom Properties are the foundation of every modern design system. Declaring tokens in <code>:root</code>, scoping overrides to components, and toggling themes with a single <code>data-attribute</code> means your entire site can be restyled with minimal code changes.</p>
+        <p>Final topic: <strong>Pseudo-classes, Pseudo-elements &amp; Advanced Selectors</strong> — the final pieces of the CSS toolkit.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

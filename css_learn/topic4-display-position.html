@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 4: Display &amp; Positioning</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Display demos */
+    .display-demo { background: #f9fafb; border: 2px dashed #d1d5db; border-radius: 10px; padding: 20px; margin: 1.5em 0; }
+    .demo-label { font-size: 0.8em; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+    .block-demo div { background: #bae6fd; border: 2px solid #0284c7; padding: 10px 16px; margin-bottom: 6px; border-radius: 4px; color: #0c4a6e; font-weight: 600; }
+    .inline-demo span { background: #d1fae5; border: 2px solid #10b981; padding: 4px 12px; margin: 4px; border-radius: 4px; color: #064e3b; font-weight: 600; }
+    .inline-block-demo span { background: #fde68a; border: 2px solid #f59e0b; padding: 10px 20px; margin: 4px; display: inline-block; width: 120px; text-align: center; border-radius: 4px; color: #78350f; font-weight: 600; }
+
+    /* Position demo */
+    .position-demo {
+        position: relative;
+        background: #f3f4f6;
+        border: 2px dashed #9ca3af;
+        border-radius: 10px;
+        height: 180px;
+        margin: 1.5em 0;
+        padding: 16px;
+        overflow: hidden;
+    }
+    .pos-static  { background: #bae6fd; padding: 8px 14px; border-radius: 6px; display: inline-block; margin: 4px; font-size: 0.85em; font-weight: 700; color: #0369a1; }
+    .pos-relative { background: #d1fae5; padding: 8px 14px; border-radius: 6px; display: inline-block; position: relative; top: 20px; left: 20px; font-size: 0.85em; font-weight: 700; color: #047857; }
+    .pos-absolute { background: #fde68a; padding: 8px 14px; border-radius: 6px; position: absolute; top: 16px; right: 16px; font-size: 0.85em; font-weight: 700; color: #92400e; }
+    .pos-label { font-size: 0.75em; color: #9ca3af; position: absolute; bottom: 10px; left: 16px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Display &amp; Positioning</h1>
+
+    <div class="intro-text">
+        Two of the most important CSS properties are <strong>display</strong> — which controls how an element generates its box — and <strong>position</strong> — which controls how that box is placed in the document. Together they are the foundation of every layout on the web.
+    </div>
+
+    <h2>The display Property</h2>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Value</th><th>Behaviour</th><th>Examples</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>block</code></td><td>Takes full width, starts on a new line</td><td><code>&lt;div&gt;, &lt;p&gt;, &lt;h1&gt;</code></td></tr>
+                <tr><td><code>inline</code></td><td>Flows with text, ignores width/height</td><td><code>&lt;span&gt;, &lt;a&gt;, &lt;strong&gt;</code></td></tr>
+                <tr><td><code>inline-block</code></td><td>Flows with text but respects width/height</td><td>Icon + label combos, nav items</td></tr>
+                <tr><td><code>none</code></td><td>Hidden — takes up no space at all</td><td>Toggle visibility via JS</td></tr>
+                <tr><td><code>flex</code></td><td>Enables Flexbox on the element</td><td>Navigation bars, card rows</td></tr>
+                <tr><td><code>grid</code></td><td>Enables CSS Grid on the element</td><td>Page layouts, gallery grids</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>block vs inline vs inline-block</h3>
+
+    <div class="display-demo">
+        <div class="demo-label">display: block — each on its own line</div>
+        <div class="block-demo"><div>Block element</div><div>Block element</div></div>
+    </div>
+
+    <div class="display-demo">
+        <div class="demo-label">display: inline — flows like text</div>
+        <div class="inline-demo">
+            <span>Inline A</span><span>Inline B</span><span>Inline C</span>
+        </div>
+    </div>
+
+    <div class="display-demo">
+        <div class="demo-label">display: inline-block — side by side but respects width</div>
+        <div class="inline-block-demo">
+            <span>Box 1</span><span>Box 2</span><span>Box 3</span>
+        </div>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Display Values</div>
+        <code><span class="comment">/* Turn a list into a horizontal navigation */</span>
+<span class="selector">nav li</span> {
+    <span class="property">display</span>: <span class="value">inline-block</span>;
+    <span class="property">padding</span>: <span class="value">8px 16px</span>;
+}
+
+<span class="comment">/* Hide an element completely */</span>
+<span class="selector">.hidden</span> { <span class="property">display</span>: <span class="value">none</span>; }
+
+<span class="comment">/* Hide but keep space (use visibility instead) */</span>
+<span class="selector">.invisible</span> { <span class="property">visibility</span>: <span class="value">hidden</span>; }
+
+<span class="comment">/* Control opacity without removing layout space */</span>
+<span class="selector">.faded</span> { <span class="property">opacity</span>: <span class="value">0.4</span>; }</code>
+    </div>
+
+    <h2>The position Property</h2>
+
+    <div class="position-demo">
+        <span class="pos-static">static (default)</span>
+        <span class="pos-relative">relative (offset)</span>
+        <span class="pos-absolute">absolute (pinned)</span>
+        <span class="pos-label">position demo — see how the three behave differently</span>
+    </div>
+
+    <h3>position: static (default)</h3>
+    <p>Elements are placed in the normal document flow. The <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">top / right / bottom / left</code> properties have no effect.</p>
+
+    <h3>position: relative</h3>
+    <p>The element stays in the normal flow but you can nudge it with <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">top / left / right / bottom</code>. The original space is still reserved. Also creates a <strong>positioning context</strong> for absolutely-positioned children.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Relative Positioning</div>
+        <code><span class="selector">.nudge</span> {
+    <span class="property">position</span>: <span class="value">relative</span>;
+    <span class="property">top</span>: <span class="value">10px</span>;    <span class="comment">/* pushed down 10px */</span>
+    <span class="property">left</span>: <span class="value">20px</span>;   <span class="comment">/* pushed right 20px */</span>
+}</code>
+    </div>
+
+    <h3>position: absolute</h3>
+    <p>The element is removed from the normal flow and positioned relative to its <strong>nearest positioned ancestor</strong> (any ancestor with a position other than static). If none exists, it positions relative to the initial containing block (the viewport).</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Absolute Positioning (common pattern)</div>
+        <code><span class="comment">/* Parent is the positioning context */</span>
+<span class="selector">.card</span> {
+    <span class="property">position</span>: <span class="value">relative</span>;
+}
+
+<span class="comment">/* Badge pinned to the top-right corner of .card */</span>
+<span class="selector">.card .badge</span> {
+    <span class="property">position</span>: <span class="value">absolute</span>;
+    <span class="property">top</span>: <span class="value">-8px</span>;
+    <span class="property">right</span>: <span class="value">-8px</span>;
+}
+
+<span class="comment">/* Centre an element inside its parent */</span>
+<span class="selector">.centered</span> {
+    <span class="property">position</span>: <span class="value">absolute</span>;
+    <span class="property">top</span>: <span class="value">50%</span>;
+    <span class="property">left</span>: <span class="value">50%</span>;
+    <span class="property">transform</span>: <span class="value">translate(-50%, -50%)</span>;
+}</code>
+    </div>
+
+    <h3>position: fixed</h3>
+    <p>Like absolute but positioned relative to the <strong>viewport</strong>, and stays there even when the page scrolls. Used for sticky headers, floating action buttons, and cookie banners.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Fixed Positioning</div>
+        <code><span class="selector">.navbar</span> {
+    <span class="property">position</span>: <span class="value">fixed</span>;
+    <span class="property">top</span>: <span class="value">0</span>;
+    <span class="property">left</span>: <span class="value">0</span>;
+    <span class="property">right</span>: <span class="value">0</span>;       <span class="comment">/* or width: 100% */</span>
+    <span class="property">z-index</span>: <span class="value">1000</span>;
+    <span class="property">background</span>: <span class="value">white</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 2px 8px rgba(0,0,0,0.1)</span>;
+}</code>
+    </div>
+
+    <h3>position: sticky</h3>
+    <p>The element behaves like <code>relative</code> until it reaches a specified scroll threshold, then acts like <code>fixed</code>. The element stays within its parent container.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Sticky Positioning</div>
+        <code><span class="selector">.section-header</span> {
+    <span class="property">position</span>: <span class="value">sticky</span>;
+    <span class="property">top</span>: <span class="value">0</span>;          <span class="comment">/* sticks when it reaches the top */</span>
+    <span class="property">background</span>: <span class="value">white</span>;
+    <span class="property">z-index</span>: <span class="value">10</span>;
+    <span class="property">padding</span>: <span class="value">12px 0</span>;
+}
+
+<span class="comment">/* Table header that sticks on scroll */</span>
+<span class="selector">thead th</span> {
+    <span class="property">position</span>: <span class="value">sticky</span>;
+    <span class="property">top</span>: <span class="value">0</span>;
+}</code>
+    </div>
+
+    <h2>The z-index Property</h2>
+    <p>Controls the stacking order of positioned elements. Higher values appear on top. Only works on elements that have a position value other than <code>static</code>.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — z-index Stack</div>
+        <code><span class="selector">.modal-overlay</span> { <span class="property">z-index</span>: <span class="value">900</span>; }
+<span class="selector">.modal</span>         { <span class="property">z-index</span>: <span class="value">1000</span>; }
+<span class="selector">.tooltip</span>       { <span class="property">z-index</span>: <span class="value">1100</span>; }
+
+<span class="comment">/* Using CSS variables for a z-index scale */</span>
+<span class="selector">:root</span> {
+    <span class="property">--z-nav</span>:     <span class="value">100</span>;
+    <span class="property">--z-dropdown</span>:<span class="value">200</span>;
+    <span class="property">--z-modal</span>:  <span class="value">1000</span>;
+    <span class="property">--z-toast</span>:  <span class="value">1100</span>;
+}</code>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">overflow: hidden and Sticky</div>
+        <p>If any ancestor of a <code>sticky</code> element has <code>overflow: hidden</code> or <code>overflow: auto</code>, the sticky behaviour will break. This is a very common gotcha.</p>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Centering Cheat Sheet</div>
+        <p>
+            <strong>Horizontal block:</strong> <code style="background:#fff;padding:2px 6px;border-radius:3px;">margin: 0 auto</code> &nbsp;|&nbsp;
+            <strong>Absolute centre:</strong> <code style="background:#fff;padding:2px 6px;border-radius:3px;">top:50%;left:50%;transform:translate(-50%,-50%)</code> &nbsp;|&nbsp;
+            <strong>Flex centre:</strong> (next topic)
+        </p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>The <code>display</code> property determines how a box is generated; <code>position</code> determines where it lives. Together — block/inline flow, relative contexts, absolute pinning, fixed bars, and sticky headers — they give you complete control over where elements appear.</p>
+        <p>Next: <strong>Flexbox</strong> — the one-dimensional layout system that makes rows and columns effortless.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

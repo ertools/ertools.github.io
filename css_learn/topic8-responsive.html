@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 8: Responsive Design &amp; Media Queries</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Viewport demo */
+    .breakpoint-bar { display: flex; border-radius: 10px; overflow: hidden; margin: 1.5em 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .bp { padding: 16px 10px; text-align: center; font-size: 0.82em; font-weight: 700; }
+    .bp-xs  { background: #fde68a; color: #78350f; flex: 1; }
+    .bp-sm  { background: #bae6fd; color: #0369a1; flex: 1.5; }
+    .bp-md  { background: #d1fae5; color: #047857; flex: 2; }
+    .bp-lg  { background: #ede9fe; color: #5b21b6; flex: 2.5; }
+    .bp-xl  { background: #fce7f3; color: #9d174d; flex: 3; }
+
+    /* Units visual */
+    .units-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: 1.5em 0; }
+    .unit-card { background: white; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid #667eea; }
+    .unit-name { font-size: 1.5em; font-weight: 800; color: #667eea; }
+    .unit-desc { font-size: 0.82em; color: #6b7280; margin-top: 4px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Responsive Design &amp; Media Queries</h1>
+
+    <div class="intro-text">
+        Responsive design means your website looks great and works correctly on every screen — from a 320px phone to a 4K monitor. The core tools are media queries, fluid units (%, vw, rem), and modern layout techniques like Flexbox and Grid that adapt naturally to available space.
+    </div>
+
+    <h2>The Viewport Meta Tag</h2>
+    <p>This HTML tag is required for mobile-responsive behaviour. Without it, mobile browsers assume your page is desktop-width and zoom out.</p>
+
+    <div class="code-container">
+        <div class="code-header">HTML — Viewport Meta Tag</div>
+        <code>&lt;<span class="selector">meta</span> <span class="property">name</span>="<span class="value">viewport</span>" <span class="property">content</span>="<span class="value">width=device-width, initial-scale=1.0</span>"&gt;</code>
+    </div>
+
+    <h2>Media Queries</h2>
+    <p>Media queries let you apply CSS rules only when certain conditions are met — most commonly a minimum or maximum viewport width.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Media Query Syntax</div>
+        <code><span class="comment">/* Apply styles only at 768px and wider */</span>
+<span class="selector">@media</span> (<span class="property">min-width</span>: <span class="value">768px</span>) {
+    <span class="selector">.sidebar</span> {
+        <span class="property">display</span>: <span class="value">block</span>;
+    }
+}
+
+<span class="comment">/* Only at 480px and below */</span>
+<span class="selector">@media</span> (<span class="property">max-width</span>: <span class="value">480px</span>) {
+    <span class="selector">.nav-links</span> {
+        <span class="property">display</span>: <span class="value">none</span>;
+    }
+}
+
+<span class="comment">/* Range with min and max */</span>
+<span class="selector">@media</span> (<span class="property">min-width</span>: <span class="value">600px</span>) <span class="value">and</span> (<span class="property">max-width</span>: <span class="value">900px</span>) {
+    <span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(2, 1fr)</span>; }
+}
+
+<span class="comment">/* Dark mode preference */</span>
+<span class="selector">@media</span> (<span class="property">prefers-color-scheme</span>: <span class="value">dark</span>) {
+    <span class="selector">body</span> { <span class="property">background</span>: <span class="value">#0f172a</span>; <span class="property">color</span>: <span class="value">#e2e8f0</span>; }
+}
+
+<span class="comment">/* Print styles */</span>
+<span class="selector">@media</span> <span class="value">print</span> {
+    <span class="selector">.navbar, .sidebar</span> { <span class="property">display</span>: <span class="value">none</span>; }
+}</code>
+    </div>
+
+    <h2>Mobile-First vs Desktop-First</h2>
+
+    <div class="info-box">
+        <div class="box-title">Mobile-First is the Recommended Approach</div>
+        <p>Write your base styles for mobile, then add complexity for larger screens with <code>min-width</code> queries. This results in smaller CSS sent to mobile devices (the most constrained) and aligns with how browsers process styles. Desktop-first uses <code>max-width</code> queries to strip features back for smaller screens — it often produces messier overrides.</p>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Mobile-First Pattern</div>
+        <code><span class="comment">/* Base: mobile layout — 1 column */</span>
+<span class="selector">.grid</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+    <span class="property">grid-template-columns</span>: <span class="value">1fr</span>;
+    <span class="property">gap</span>: <span class="value">16px</span>;
+}
+
+<span class="comment">/* Tablet (640px+): 2 columns */</span>
+<span class="selector">@media</span> (<span class="property">min-width</span>: <span class="value">640px</span>) {
+    <span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(2, 1fr)</span>; }
+}
+
+<span class="comment">/* Desktop (1024px+): 3 columns */</span>
+<span class="selector">@media</span> (<span class="property">min-width</span>: <span class="value">1024px</span>) {
+    <span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>; }
+}</code>
+    </div>
+
+    <h2>Common Breakpoints</h2>
+
+    <div class="breakpoint-bar">
+        <div class="bp bp-xs">&lt; 480px<br>Mobile</div>
+        <div class="bp bp-sm">480–640px<br>Large Mobile</div>
+        <div class="bp bp-md">640–1024px<br>Tablet</div>
+        <div class="bp bp-lg">1024–1280px<br>Desktop</div>
+        <div class="bp bp-xl">&gt; 1280px<br>Wide</div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Name</th><th>min-width</th><th>Typical target</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>sm</td><td><code>480px</code></td><td>Large phones</td></tr>
+                <tr><td>md</td><td><code>640px</code></td><td>Tablets (portrait)</td></tr>
+                <tr><td>lg</td><td><code>1024px</code></td><td>Tablets (landscape) / Laptop</td></tr>
+                <tr><td>xl</td><td><code>1280px</code></td><td>Desktop</td></tr>
+                <tr><td>2xl</td><td><code>1536px</code></td><td>Wide desktop</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Design-Driven Breakpoints</div>
+        <p>Don't add breakpoints just because a standard pixel value exists — add them when your design <em>breaks</em>. Resize the browser slowly and add a breakpoint where the layout stops looking right.</p>
+    </div>
+
+    <h2>Responsive Units</h2>
+
+    <div class="units-grid">
+        <div class="unit-card"><div class="unit-name">%</div><div class="unit-desc">Relative to parent element</div></div>
+        <div class="unit-card"><div class="unit-name">vw</div><div class="unit-desc">1% of viewport width</div></div>
+        <div class="unit-card"><div class="unit-name">vh</div><div class="unit-desc">1% of viewport height</div></div>
+        <div class="unit-card"><div class="unit-name">rem</div><div class="unit-desc">Relative to root font size</div></div>
+        <div class="unit-card"><div class="unit-name">em</div><div class="unit-desc">Relative to current font size</div></div>
+        <div class="unit-card"><div class="unit-name">clamp</div><div class="unit-desc">min / preferred / max</div></div>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Fluid Sizing Techniques</div>
+        <code><span class="comment">/* Fluid container */</span>
+<span class="selector">.container</span> {
+    <span class="property">width</span>: <span class="value">min(100%, 1200px)</span>;
+    <span class="property">margin-inline</span>: <span class="value">auto</span>;
+    <span class="property">padding-inline</span>: <span class="value">clamp(16px, 5vw, 48px)</span>;
+}
+
+<span class="comment">/* Fluid font size */</span>
+<span class="selector">h1</span> {
+    <span class="property">font-size</span>: <span class="value">clamp(1.8rem, 5vw, 3.5rem)</span>;
+}
+
+<span class="comment">/* Fluid image */</span>
+<span class="selector">img</span> {
+    <span class="property">max-width</span>: <span class="value">100%</span>;
+    <span class="property">height</span>: <span class="value">auto</span>;
+    <span class="property">display</span>: <span class="value">block</span>;
+}</code>
+    </div>
+
+    <h2>Responsive Images</h2>
+
+    <div class="code-container">
+        <div class="code-header">HTML — srcset for High-DPI &amp; Responsive Images</div>
+        <code>&lt;<span class="selector">img</span>
+    <span class="property">src</span>="<span class="value">photo-800.jpg</span>"
+    <span class="property">srcset</span>="<span class="value">photo-400.jpg 400w, photo-800.jpg 800w, photo-1200.jpg 1200w</span>"
+    <span class="property">sizes</span>="<span class="value">(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw</span>"
+    <span class="property">alt</span>="<span class="value">Responsive photo</span>"
+    <span class="property">loading</span>="<span class="value">lazy</span>"
+&gt;</code>
+    </div>
+
+    <h2>Container Queries (Modern CSS)</h2>
+    <p>Container queries let an element respond to the size of its <em>container</em> rather than the viewport — perfect for reusable components.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Container Queries</div>
+        <code><span class="comment">/* 1. Declare the containment context */</span>
+<span class="selector">.card-wrapper</span> {
+    <span class="property">container-type</span>: <span class="value">inline-size</span>;
+    <span class="property">container-name</span>: <span class="value">card</span>;
+}
+
+<span class="comment">/* 2. Style based on container width */</span>
+<span class="selector">@container card</span> (<span class="property">min-width</span>: <span class="value">400px</span>) {
+    <span class="selector">.card</span> {
+        <span class="property">flex-direction</span>: <span class="value">row</span>;
+    }
+}</code>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">Don't Forget Touch Targets</div>
+        <p>On mobile, interactive elements (buttons, links) should be at least <strong>44×44px</strong> in size (Apple / WCAG guideline). Use <code>padding</code> to enlarge small elements without changing their visual appearance.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>Responsive design is built on a mobile-first philosophy, media queries for layout pivots, fluid units for sizing, and native layout tools like Grid and Flexbox. Together, they ensure your site works beautifully on every screen without needing separate mobile and desktop codebases.</p>
+        <p>Next: <strong>CSS Variables &amp; Custom Properties</strong> — building maintainable, themeable design systems.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

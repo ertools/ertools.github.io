@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 2: The CSS Box Model</title>
+<style>
+    .post-content {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.8;
+        color: #2c3e50;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
+
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+
+    .intro-text {
+        font-size: 1.15em; color: #555; background: #f8f9fa;
+        padding: 20px; border-left: 4px solid #667eea;
+        margin: 1.5em 0; border-radius: 0 8px 8px 0;
+    }
+
+    .code-container {
+        background: #1e293b; border-radius: 8px; padding: 20px;
+        margin: 1.5em 0; overflow-x: auto;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .code-header {
+        color: #94a3b8; font-size: 0.85em; font-weight: 600;
+        text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px;
+    }
+
+    .code-container code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.95em; line-height: 1.6; color: #e2e8f0;
+        display: block; white-space: pre;
+    }
+
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Box model diagram */
+    .box-diagram {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 30px;
+        margin: 1.5em 0;
+        text-align: center;
+        border: 2px dashed #d1d5db;
+    }
+
+    .box-margin {
+        background: #fde68a;
+        padding: 20px;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .box-border {
+        background: #6b7280;
+        padding: 16px;
+        border-radius: 6px;
+    }
+
+    .box-padding {
+        background: #bae6fd;
+        padding: 16px;
+        border-radius: 4px;
+    }
+
+    .box-content {
+        background: #bbf7d0;
+        padding: 20px;
+        border-radius: 3px;
+        font-weight: 700;
+        color: #065f46;
+        font-size: 1em;
+    }
+
+    .box-label {
+        font-size: 0.78em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .label-margin { color: #92400e; }
+    .label-border { color: #e5e7eb; }
+    .label-padding { color: #0369a1; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>The CSS Box Model</h1>
+
+    <div class="intro-text">
+        Every element on a web page is a rectangular box. The CSS Box Model describes how this box is built from four layers — content, padding, border, and margin — and understanding it is essential to mastering layout.
+    </div>
+
+    <h2>The Four Layers</h2>
+
+    <div class="box-diagram">
+        <div class="box-margin">
+            <span class="box-label label-margin">Margin (outside space)</span>
+            <div class="box-border">
+                <span class="box-label label-border">Border</span>
+                <div class="box-padding">
+                    <span class="box-label label-padding">Padding (inside space)</span>
+                    <div class="box-content">Content</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Layer</th><th>Description</th><th>Affects Background?</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Content</strong></td><td>Where text and child elements live</td><td>Yes</td></tr>
+                <tr><td><strong>Padding</strong></td><td>Space between content and border</td><td>Yes</td></tr>
+                <tr><td><strong>Border</strong></td><td>The line around padding and content</td><td>Yes (sits on top)</td></tr>
+                <tr><td><strong>Margin</strong></td><td>Space outside the border, always transparent</td><td>No</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Content, Width &amp; Height</h2>
+    <p>By default, <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">width</code> and <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">height</code> set the size of the <em>content area only</em>. Padding and border are added on top of that.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Width and Height</div>
+        <code><span class="selector">.card</span> {
+    <span class="property">width</span>: <span class="value">300px</span>;
+    <span class="property">height</span>: <span class="value">200px</span>;
+    <span class="property">min-width</span>: <span class="value">200px</span>;
+    <span class="property">max-width</span>: <span class="value">100%</span>;   <span class="comment">/* responsive cap */</span>
+}</code>
+    </div>
+
+    <h2>Padding</h2>
+    <p>Padding creates breathing room <em>inside</em> the element. It inherits the element's background color.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Padding Shorthand</div>
+        <code><span class="comment">/* All sides equal */</span>
+<span class="selector">.box</span> { <span class="property">padding</span>: <span class="value">20px</span>; }
+
+<span class="comment">/* Vertical (top/bottom) | Horizontal (left/right) */</span>
+<span class="selector">.box</span> { <span class="property">padding</span>: <span class="value">10px 24px</span>; }
+
+<span class="comment">/* Top | Horizontal | Bottom */</span>
+<span class="selector">.box</span> { <span class="property">padding</span>: <span class="value">10px 24px 16px</span>; }
+
+<span class="comment">/* Top | Right | Bottom | Left  (clockwise) */</span>
+<span class="selector">.box</span> { <span class="property">padding</span>: <span class="value">10px 24px 16px 8px</span>; }
+
+<span class="comment">/* Individual sides */</span>
+<span class="selector">.box</span> {
+    <span class="property">padding-top</span>: <span class="value">12px</span>;
+    <span class="property">padding-right</span>: <span class="value">20px</span>;
+    <span class="property">padding-bottom</span>: <span class="value">12px</span>;
+    <span class="property">padding-left</span>: <span class="value">20px</span>;
+}</code>
+    </div>
+
+    <h2>Border</h2>
+    <p>The border sits between padding and margin. It has three sub-properties: width, style, and color.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Border</div>
+        <code><span class="comment">/* Shorthand: width style color */</span>
+<span class="selector">.card</span> { <span class="property">border</span>: <span class="value">2px solid #667eea</span>; }
+
+<span class="comment">/* Individual properties */</span>
+<span class="selector">.card</span> {
+    <span class="property">border-width</span>: <span class="value">2px</span>;
+    <span class="property">border-style</span>: <span class="value">dashed</span>;   <span class="comment">/* solid | dashed | dotted | double | none */</span>
+    <span class="property">border-color</span>: <span class="value">#667eea</span>;
+}
+
+<span class="comment">/* Per-side */</span>
+<span class="selector">.sidebar</span> {
+    <span class="property">border-left</span>: <span class="value">4px solid #10b981</span>;
+}
+
+<span class="comment">/* Rounded corners */</span>
+<span class="selector">.pill</span> {
+    <span class="property">border-radius</span>: <span class="value">999px</span>;
+}
+
+<span class="selector">.card</span> {
+    <span class="property">border-radius</span>: <span class="value">12px</span>;            <span class="comment">/* all corners */</span>
+    <span class="property">border-radius</span>: <span class="value">8px 8px 0 0</span>;    <span class="comment">/* top-left top-right bottom-right bottom-left */</span>
+}</code>
+    </div>
+
+    <h2>Margin</h2>
+    <p>Margin creates space <em>outside</em> the element. It is always transparent — backgrounds do not show through.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Margin &amp; Centering</div>
+        <code><span class="comment">/* Same shorthand as padding */</span>
+<span class="selector">.section</span> { <span class="property">margin</span>: <span class="value">2em 0</span>; }
+
+<span class="comment">/* Center a block element horizontally */</span>
+<span class="selector">.container</span> {
+    <span class="property">width</span>: <span class="value">800px</span>;
+    <span class="property">margin</span>: <span class="value">0 auto</span>;   <span class="comment">/* top/bottom 0, left/right auto */</span>
+}
+
+<span class="comment">/* Negative margin — pulls elements closer */</span>
+<span class="selector">.overlap</span> {
+    <span class="property">margin-top</span>: <span class="value">-20px</span>;
+}</code>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">Margin Collapsing</div>
+        <p>When two vertical margins meet (e.g., a paragraph followed by another paragraph), they <strong>collapse</strong> into a single margin equal to the larger of the two. This only applies to block-level elements in normal flow — it does not happen with flex or grid children.</p>
+    </div>
+
+    <h2>box-sizing: The Game Changer</h2>
+
+    <div class="info-box">
+        <div class="box-title">The Default Problem</div>
+        <p>By default (<code>box-sizing: content-box</code>), if you set <code>width: 300px; padding: 20px; border: 2px solid</code>, the element is actually <strong>344px wide</strong> (300 + 40 padding + 4 border). This makes sizing unpredictable.</p>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — box-sizing Fix</div>
+        <code><span class="comment">/* Modern reset — apply to every element */</span>
+<span class="selector">*, *::before, *::after</span> {
+    <span class="property">box-sizing</span>: <span class="value">border-box</span>;
+}
+
+<span class="comment">/* Now padding and border are INCLUDED in width/height */</span>
+<span class="selector">.card</span> {
+    <span class="property">width</span>: <span class="value">300px</span>;
+    <span class="property">padding</span>: <span class="value">20px</span>;
+    <span class="property">border</span>: <span class="value">2px solid #667eea</span>;
+    <span class="comment">/* Total rendered width = exactly 300px */</span>
+}</code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Always Use border-box</div>
+        <p>Add <code style="background:#fff;padding:2px 6px;border-radius:3px;">*, *::before, *::after { box-sizing: border-box; }</code> at the top of every stylesheet. It is the first line in most professional CSS frameworks.</p>
+    </div>
+
+    <h2>The outline Property</h2>
+    <p><strong>outline</strong> looks like a border but does <em>not</em> affect layout — it sits outside the border and takes up no space. Browsers use it for focus rings.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Outline</div>
+        <code><span class="comment">/* Accessible focus indicator — don't remove without a replacement */</span>
+<span class="selector">button:focus</span> {
+    <span class="property">outline</span>: <span class="value">3px solid #667eea</span>;
+    <span class="property">outline-offset</span>: <span class="value">4px</span>;
+}
+
+<span class="comment">/* Custom focus style */</span>
+<span class="selector">input:focus</span> {
+    <span class="property">outline</span>: <span class="value">none</span>;
+    <span class="property">border</span>: <span class="value">2px solid #667eea</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 0 0 3px rgba(102,126,234,0.3)</span>;
+}</code>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>The Box Model — content, padding, border, margin — governs every element's size and spacing. Setting <code>box-sizing: border-box</code> globally makes sizing intuitive and predictable.</p>
+        <p>Next up: <strong>Colors &amp; Typography</strong> — making your text and palettes look great.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

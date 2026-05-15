@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 1: CSS Introduction & Selectors</title>
+<style>
+    .post-content {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.8;
+        color: #2c3e50;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
+
+    .post-content h1 {
+        color: #1a202c;
+        font-size: 2.2em;
+        font-weight: 800;
+        margin: 0 0 0.4em;
+        line-height: 1.2;
+    }
+
+    .post-content h2 {
+        color: #2c3e50;
+        font-size: 1.8em;
+        font-weight: 700;
+        margin: 2em 0 1em;
+        padding-bottom: 0.5em;
+        border-bottom: 3px solid #667eea;
+    }
+
+    .post-content h3 {
+        color: #34495e;
+        font-size: 1.4em;
+        font-weight: 600;
+        margin: 1.8em 0 1em;
+    }
+
+    .intro-text {
+        font-size: 1.15em;
+        color: #555;
+        background: #f8f9fa;
+        padding: 20px;
+        border-left: 4px solid #667eea;
+        margin: 1.5em 0;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .code-container {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 1.5em 0;
+        overflow-x: auto;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .code-header {
+        color: #94a3b8;
+        font-size: 0.85em;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        letter-spacing: 0.5px;
+    }
+
+    .code-container code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.95em;
+        line-height: 1.6;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre;
+    }
+
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .tag { color: #f472b6; }
+    .attr { color: #a78bfa; }
+
+    .info-box {
+        background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+        border-left: 4px solid #0284c7;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 1.5em 0;
+    }
+
+    .tip-box {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border-left: 4px solid #10b981;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 1.5em 0;
+    }
+
+    .warning-box {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 4px solid #f59e0b;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 1.5em 0;
+    }
+
+    .box-title {
+        font-weight: 700;
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #1f2937;
+    }
+
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+
+    .post-content ul, .post-content ol {
+        margin: 1.5em 0;
+        padding-left: 2em;
+    }
+
+    .post-content li {
+        margin-bottom: 0.8em;
+        color: #4b5563;
+    }
+
+    .post-content p {
+        margin-bottom: 1.2em;
+        color: #4b5563;
+    }
+
+    .post-content strong { color: #1f2937; font-weight: 600; }
+
+    .table-responsive {
+        overflow-x: auto;
+        margin: 1.5em 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        font-size: 0.95em;
+    }
+
+    .styled-table thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .styled-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85em;
+        letter-spacing: 0.5px;
+    }
+
+    .styled-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9em;
+        color: #dc2626;
+    }
+
+    .selector-demo {
+        background: #f9fafb;
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 24px;
+        margin: 1.5em 0;
+    }
+
+    .selector-demo p { margin: 6px 0; }
+    .selector-demo .highlight-el  { background: #fef9c3; padding: 2px 6px; border-radius: 3px; }
+    .selector-demo .highlight-cls { background: #dcfce7; padding: 2px 6px; border-radius: 3px; }
+    .selector-demo .highlight-id  { background: #ede9fe; padding: 2px 6px; border-radius: 3px; }
+
+    .conclusion-box {
+        background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+        border-radius: 8px;
+        padding: 25px;
+        margin: 2em 0;
+    }
+
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .post-content h3 { font-size: 1.2em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>CSS Introduction &amp; Selectors</h1>
+
+    <div class="intro-text">
+        CSS (Cascading Style Sheets) is the language that brings web pages to life. While HTML structures your content, CSS controls everything about how it looks — colors, fonts, spacing, layout, and animation. Mastering selectors is the first step to writing powerful CSS.
+    </div>
+
+    <h2>What is CSS?</h2>
+    <p>CSS works by <strong>selecting</strong> HTML elements and applying <strong>declarations</strong> (property–value pairs) to them. Every CSS rule follows the same basic structure:</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Anatomy of a Rule</div>
+        <code><span class="comment">/* selector  { property: value; } */</span>
+
+<span class="selector">h1</span> {
+    <span class="property">color</span>: <span class="value">#2c3e50</span>;
+    <span class="property">font-size</span>: <span class="value">2em</span>;
+    <span class="property">font-weight</span>: <span class="value">700</span>;
+}
+
+<span class="selector">.intro</span> {
+    <span class="property">background</span>: <span class="value">#f0f4ff</span>;
+    <span class="property">padding</span>: <span class="value">20px</span>;
+    <span class="property">border-radius</span>: <span class="value">8px</span>;
+}</code>
+    </div>
+
+    <h2>Ways to Add CSS</h2>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Where</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>External stylesheet</strong></td>
+                    <td><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></td>
+                    <td>Production — keeps HTML clean, styles shared</td>
+                </tr>
+                <tr>
+                    <td><strong>Internal / embedded</strong></td>
+                    <td><code>&lt;style&gt; … &lt;/style&gt;</code> in <code>&lt;head&gt;</code></td>
+                    <td>Single-page demos, email templates</td>
+                </tr>
+                <tr>
+                    <td><strong>Inline</strong></td>
+                    <td><code>style="…"</code> on the element</td>
+                    <td>One-off overrides, dynamic JS styling</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Basic Selectors</h2>
+
+    <h3>1. Element (Type) Selector</h3>
+    <p>Targets every instance of an HTML element.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Element Selector</div>
+        <code><span class="selector">p</span> {
+    <span class="property">color</span>: <span class="value">#4b5563</span>;
+    <span class="property">line-height</span>: <span class="value">1.7</span>;
+}
+
+<span class="selector">h2</span> {
+    <span class="property">font-size</span>: <span class="value">1.6em</span>;
+    <span class="property">margin-bottom</span>: <span class="value">0.5em</span>;
+}</code>
+    </div>
+
+    <h3>2. Class Selector</h3>
+    <p>Targets any element that has the matching <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">class</code> attribute. Classes are reusable and the most common selector in real projects.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Class Selector</div>
+        <code><span class="comment">/* HTML: &lt;div class="card"&gt; */</span>
+<span class="selector">.card</span> {
+    <span class="property">background</span>: <span class="value">white</span>;
+    <span class="property">border-radius</span>: <span class="value">12px</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 4px 16px rgba(0,0,0,0.1)</span>;
+    <span class="property">padding</span>: <span class="value">24px</span>;
+}
+
+<span class="comment">/* Multiple classes on one element */</span>
+<span class="selector">.btn.btn-primary</span> {
+    <span class="property">background</span>: <span class="value">#667eea</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+}</code>
+    </div>
+
+    <h3>3. ID Selector</h3>
+    <p>Targets a single element with the matching <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">id</code>. IDs must be unique per page.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — ID Selector</div>
+        <code><span class="comment">/* HTML: &lt;nav id="main-nav"&gt; */</span>
+<span class="selector">#main-nav</span> {
+    <span class="property">position</span>: <span class="value">sticky</span>;
+    <span class="property">top</span>: <span class="value">0</span>;
+    <span class="property">background</span>: <span class="value">#1e293b</span>;
+    <span class="property">z-index</span>: <span class="value">1000</span>;
+}</code>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">Prefer Classes Over IDs for Styling</div>
+        <p>IDs have very high specificity, making them hard to override later. Reserve IDs for JavaScript hooks or anchor links, and use classes for all your styling.</p>
+    </div>
+
+    <h2>Intermediate Selectors</h2>
+
+    <h3>Attribute Selector</h3>
+    <div class="code-container">
+        <div class="code-header">CSS — Attribute Selectors</div>
+        <code><span class="comment">/* Exact match */</span>
+<span class="selector">input[type="email"]</span> {
+    <span class="property">border</span>: <span class="value">2px solid #667eea</span>;
+}
+
+<span class="comment">/* Starts with */</span>
+<span class="selector">a[href^="https"]</span> {
+    <span class="property">color</span>: <span class="value">#10b981</span>;
+}
+
+<span class="comment">/* Ends with */</span>
+<span class="selector">a[href$=".pdf"]</span> {
+    <span class="property">color</span>: <span class="value">#ef4444</span>;
+}
+
+<span class="comment">/* Contains */</span>
+<span class="selector">a[href*="github"]</span> {
+    <span class="property">font-weight</span>: <span class="value">bold</span>;
+}</code>
+    </div>
+
+    <h3>Grouping Selector</h3>
+    <div class="code-container">
+        <div class="code-header">CSS — Grouping</div>
+        <code><span class="comment">/* Apply the same rule to multiple selectors */</span>
+<span class="selector">h1, h2, h3, h4</span> {
+    <span class="property">font-family</span>: <span class="value">'Georgia', serif</span>;
+    <span class="property">color</span>: <span class="value">#1a202c</span>;
+    <span class="property">line-height</span>: <span class="value">1.3</span>;
+}</code>
+    </div>
+
+    <h3>Combinator Selectors</h3>
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Combinator</th><th>Syntax</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Descendant</strong></td><td><code>div p</code></td><td>Any <code>&lt;p&gt;</code> inside a <code>&lt;div&gt;</code></td></tr>
+                <tr><td><strong>Child</strong></td><td><code>ul &gt; li</code></td><td>Direct children only</td></tr>
+                <tr><td><strong>Adjacent sibling</strong></td><td><code>h2 + p</code></td><td>The first <code>&lt;p&gt;</code> directly after an <code>&lt;h2&gt;</code></td></tr>
+                <tr><td><strong>General sibling</strong></td><td><code>h2 ~ p</code></td><td>All <code>&lt;p&gt;</code> siblings after an <code>&lt;h2&gt;</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Combinators in Practice</div>
+        <code><span class="comment">/* Descendant: any &lt;a&gt; inside .nav */</span>
+<span class="selector">.nav a</span> {
+    <span class="property">color</span>: <span class="value">white</span>;
+    <span class="property">text-decoration</span>: <span class="value">none</span>;
+}
+
+<span class="comment">/* Child: direct &lt;li&gt; children of .menu */</span>
+<span class="selector">.menu > li</span> {
+    <span class="property">display</span>: <span class="value">inline-block</span>;
+}
+
+<span class="comment">/* Adjacent: the &lt;p&gt; immediately after an &lt;h2&gt; */</span>
+<span class="selector">h2 + p</span> {
+    <span class="property">font-size</span>: <span class="value">1.1em</span>;
+    <span class="property">color</span>: <span class="value">#6b7280</span>;
+}</code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">The Universal Selector</div>
+        <p>The <strong>*</strong> selector matches every element on the page. It is commonly used in a CSS reset: <code style="background:#fff;padding:2px 6px;border-radius:3px;">* { box-sizing: border-box; margin: 0; padding: 0; }</code></p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>You have learned how CSS rules are written, three methods to include CSS, and the core selector types — element, class, ID, attribute, grouping, and combinators. These tools let you target any element on a page with precision.</p>
+        <p>In the next topic we'll explore the <strong>CSS Box Model</strong> — how every element occupies space and how margin, border, padding, and content work together.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

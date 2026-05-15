@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 7: Transitions &amp; Animations</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Interactive demos */
+    .demo-area { background: #f9fafb; border: 2px dashed #d1d5db; border-radius: 10px; padding: 30px; margin: 1.5em 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
+    .demo-label { font-size: 0.78em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; display: block; margin-bottom: 6px; }
+
+    /* Transition demos */
+    .btn-demo {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .btn-demo:hover {
+        background: #4f46e5;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+    }
+
+    .btn-slide {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        z-index: 0;
+        transition: color 0.35s ease;
+    }
+    .btn-slide::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #667eea;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.35s ease;
+        z-index: -1;
+    }
+    .btn-slide:hover { color: white; }
+    .btn-slide:hover::before { transform: scaleX(1); }
+
+    .card-demo {
+        background: white;
+        border-radius: 12px;
+        padding: 20px 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+        min-width: 140px;
+        text-align: center;
+        font-weight: 600;
+        color: #1f2937;
+    }
+    .card-demo:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+    }
+
+    /* Keyframe animations */
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50%       { transform: scale(1.15); opacity: 0.8; }
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-24px); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+        0%   { background-position: -200% 0; }
+        100% { background-position:  200% 0; }
+    }
+
+    .anim-pulse  { width: 56px; height: 56px; background: #667eea; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    .anim-spin   { width: 48px; height: 48px; border: 4px solid #e5e7eb; border-top-color: #667eea; border-radius: 50%; animation: spin 0.9s linear infinite; }
+    .anim-bounce { width: 48px; height: 48px; background: #10b981; border-radius: 50%; animation: bounce 0.8s ease-in-out infinite; }
+    .anim-fadein { background: #f3e8ff; color: #6b21a8; padding: 12px 20px; border-radius: 8px; font-weight: 700; animation: fadeInUp 1.2s ease both; }
+    .anim-shimmer {
+        height: 48px;
+        width: 180px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.6s infinite linear;
+    }
+
+    .anim-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Transitions &amp; Animations</h1>
+
+    <div class="intro-text">
+        Motion communicates meaning — it guides attention, confirms actions, and makes interfaces feel alive. CSS provides two ways to add motion: <strong>transitions</strong> (smooth changes between two states) and <strong>animations</strong> (multi-step sequences that can run continuously). Hover the examples on this page to see them live.
+    </div>
+
+    <h2>CSS Transitions</h2>
+    <p>A transition smoothly animates a property change from one value to another — most commonly triggered by <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">:hover</code>, <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">:focus</code>, or a class added by JavaScript.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — transition Syntax</div>
+        <code><span class="comment">/* transition: property duration timing-function delay */</span>
+<span class="selector">.btn</span> {
+    <span class="property">background</span>: <span class="value">#667eea</span>;
+    <span class="property">transition</span>: <span class="value">background 0.3s ease</span>;
+}
+
+<span class="selector">.btn:hover</span> {
+    <span class="property">background</span>: <span class="value">#4f46e5</span>;
+}
+
+<span class="comment">/* Multiple properties */</span>
+<span class="selector">.card</span> {
+    <span class="property">transition</span>: <span class="value">transform 0.3s ease, box-shadow 0.3s ease</span>;
+}
+
+<span class="comment">/* Transition all animatable properties */</span>
+<span class="selector">.element</span> {
+    <span class="property">transition</span>: <span class="value">all 0.25s ease</span>;  <span class="comment">/* use sparingly — can be slow */</span>
+}</code>
+    </div>
+
+    <div class="demo-area">
+        <div class="anim-item"><span class="demo-label">Hover — lift &amp; glow</span><button class="btn-demo">Hover Me</button></div>
+        <div class="anim-item"><span class="demo-label">Hover — fill slide</span><button class="btn-slide">Slide Fill</button></div>
+        <div class="anim-item"><span class="demo-label">Hover — card float</span><div class="card-demo">Float Card</div></div>
+    </div>
+
+    <h3>Timing Functions</h3>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Keyword</th><th>Cubic-bezier</th><th>Feel</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>ease</code></td><td>0.25, 0.1, 0.25, 1</td><td>Slow start &amp; end (default)</td></tr>
+                <tr><td><code>linear</code></td><td>0, 0, 1, 1</td><td>Constant speed</td></tr>
+                <tr><td><code>ease-in</code></td><td>0.42, 0, 1, 1</td><td>Starts slow, ends fast</td></tr>
+                <tr><td><code>ease-out</code></td><td>0, 0, 0.58, 1</td><td>Starts fast, ends slow — great for entering elements</td></tr>
+                <tr><td><code>ease-in-out</code></td><td>0.42, 0, 0.58, 1</td><td>Smooth start and end</td></tr>
+                <tr><td><code>cubic-bezier(…)</code></td><td>any values</td><td>Custom curve (use cubic-bezier.com)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>CSS Animations with @keyframes</h2>
+    <p>Animations define a sequence of CSS states (keyframes) that the browser cycles through automatically.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — @keyframes + animation</div>
+        <code><span class="comment">/* 1. Define the keyframes */</span>
+<span class="selector">@keyframes</span> <span class="value">fadeInUp</span> {
+    <span class="selector">from</span> { <span class="property">opacity</span>: <span class="value">0</span>; <span class="property">transform</span>: <span class="value">translateY(20px)</span>; }
+    <span class="selector">to</span>   { <span class="property">opacity</span>: <span class="value">1</span>; <span class="property">transform</span>: <span class="value">translateY(0)</span>; }
+}
+
+<span class="comment">/* Multi-step with percentages */</span>
+<span class="selector">@keyframes</span> <span class="value">bounce</span> {
+    <span class="selector">0%, 100%</span> { <span class="property">transform</span>: <span class="value">translateY(0)</span>; }
+    <span class="selector">50%</span>       { <span class="property">transform</span>: <span class="value">translateY(-24px)</span>; }
+}
+
+<span class="comment">/* 2. Apply the animation */</span>
+<span class="selector">.hero-title</span> {
+    <span class="property">animation</span>: <span class="value">fadeInUp 0.8s ease-out both</span>;
+}
+<span class="comment">/*          name    duration timing   fill-mode */</span></code>
+    </div>
+
+    <h3>Animation Properties</h3>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Individual Animation Properties</div>
+        <code><span class="selector">.spinner</span> {
+    <span class="property">animation-name</span>:            <span class="value">spin</span>;
+    <span class="property">animation-duration</span>:        <span class="value">0.9s</span>;
+    <span class="property">animation-timing-function</span>: <span class="value">linear</span>;
+    <span class="property">animation-iteration-count</span>: <span class="value">infinite</span>;   <span class="comment">/* or a number */</span>
+    <span class="property">animation-direction</span>:       <span class="value">normal</span>;      <span class="comment">/* alternate | reverse */</span>
+    <span class="property">animation-fill-mode</span>:       <span class="value">both</span>;        <span class="comment">/* forwards | backwards | both */</span>
+    <span class="property">animation-delay</span>:           <span class="value">0.2s</span>;
+    <span class="property">animation-play-state</span>:      <span class="value">running</span>;     <span class="comment">/* paused | running */</span>
+}</code>
+    </div>
+
+    <h3>Live Animation Examples</h3>
+
+    <div class="demo-area">
+        <div class="anim-item"><span class="demo-label">Pulse</span><div class="anim-pulse"></div></div>
+        <div class="anim-item"><span class="demo-label">Spinner</span><div class="anim-spin"></div></div>
+        <div class="anim-item"><span class="demo-label">Bounce</span><div class="anim-bounce"></div></div>
+        <div class="anim-item"><span class="demo-label">FadeInUp</span><div class="anim-fadein">Animated!</div></div>
+        <div class="anim-item"><span class="demo-label">Skeleton</span><div class="anim-shimmer"></div></div>
+    </div>
+
+    <h2>The transform Property</h2>
+    <p>Transforms are the most GPU-efficient way to animate movement, scale, and rotation. Combine them with transitions or animations for silky 60fps motion.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Common Transform Functions</div>
+        <code><span class="selector">.element</span> {
+    <span class="comment">/* Translate (move) */</span>
+    <span class="property">transform</span>: <span class="value">translateX(20px)</span>;
+    <span class="property">transform</span>: <span class="value">translateY(-10px)</span>;
+    <span class="property">transform</span>: <span class="value">translate(20px, -10px)</span>;
+
+    <span class="comment">/* Scale */</span>
+    <span class="property">transform</span>: <span class="value">scale(1.1)</span>;       <span class="comment">/* 10% larger */</span>
+    <span class="property">transform</span>: <span class="value">scaleX(0.5)</span>;     <span class="comment">/* half width */</span>
+
+    <span class="comment">/* Rotate */</span>
+    <span class="property">transform</span>: <span class="value">rotate(45deg)</span>;
+
+    <span class="comment">/* Skew */</span>
+    <span class="property">transform</span>: <span class="value">skewX(15deg)</span>;
+
+    <span class="comment">/* Chain multiple transforms */</span>
+    <span class="property">transform</span>: <span class="value">translateY(-4px) scale(1.05) rotate(2deg)</span>;
+}</code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Animate transform and opacity — Never width or height</div>
+        <p><code>transform</code> and <code>opacity</code> are handled by the GPU compositor and do not trigger layout recalculations, giving you smooth 60fps animations. Animating <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>, or <code>margin</code> forces the browser to repaint every frame — this is called "layout thrashing" and causes jank.</p>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">Respect prefers-reduced-motion</div>
+        <p>Always wrap decorative animations in a media query for users who request reduced motion for accessibility reasons:</p>
+        <p style="margin-top:10px;"><code style="background:#fff;padding:4px 8px;border-radius:4px;">@media (prefers-reduced-motion: reduce) { .anim { animation: none; transition: none; } }</code></p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>CSS transitions handle two-state animations triggered by state changes; <code>@keyframes</code> handle continuous or multi-step sequences. Both are most performant when animating <code>transform</code> and <code>opacity</code>. Always respect <code>prefers-reduced-motion</code>.</p>
+        <p>Next: <strong>Responsive Design &amp; Media Queries</strong> — making your layouts adapt to any screen size.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

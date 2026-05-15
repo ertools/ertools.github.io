@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 10: Pseudo-classes, Pseudo-elements &amp; Advanced Selectors</title>
+<style>
+    .post-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px; }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* ── Live interactive demos ── */
+
+    /* Hover / focus demos */
+    .demo-row { display: flex; flex-wrap: wrap; gap: 14px; background: #f9fafb; border: 2px dashed #d1d5db; border-radius: 10px; padding: 24px; margin: 1.5em 0; align-items: center; }
+    .demo-label-full { width: 100%; font-size: 0.78em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+    .link-demo { color: #667eea; font-weight: 600; text-underline-offset: 3px; transition: color 0.2s; }
+    .link-demo:visited { color: #764ba2; }
+    .link-demo:hover { color: #4f46e5; text-decoration-color: #4f46e5; }
+
+    .btn-focus { background: #667eea; color: white; border: none; padding: 12px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; }
+    .btn-focus:hover { background: #4f46e5; }
+    .btn-focus:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(102,126,234,0.4); }
+    .btn-focus:active { transform: scale(0.97); }
+
+    /* nth-child demo */
+    .nth-list { list-style: none; padding: 0; margin: 0; }
+    .nth-list li { padding: 10px 16px; font-weight: 500; color: #374151; }
+    .nth-list li:nth-child(odd)  { background: #ede9fe; }
+    .nth-list li:nth-child(even) { background: #f3f4f6; }
+    .nth-list li:first-child { border-radius: 8px 8px 0 0; }
+    .nth-list li:last-child  { border-radius: 0 0 8px 8px; }
+
+    /* Checkbox states */
+    .check-demo { display: flex; flex-direction: column; gap: 10px; }
+    .check-label {
+        display: flex; align-items: center; gap: 10px;
+        padding: 12px 16px; border-radius: 8px; border: 2px solid #e5e7eb;
+        cursor: pointer; font-weight: 500; color: #374151; transition: border-color 0.2s, background 0.2s;
+    }
+    .check-label input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #667eea; }
+    .check-label:has(input:checked) { border-color: #667eea; background: #eef2ff; color: #4338ca; }
+
+    /* Pseudo-element demos */
+    .quote-demo {
+        position: relative;
+        font-size: 1.1em;
+        font-style: italic;
+        color: #374151;
+        padding: 20px 20px 20px 60px;
+        background: #f3f4f6;
+        border-radius: 10px;
+        margin: 1.5em 0;
+    }
+    .quote-demo::before {
+        content: '\201C';
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        font-size: 3.5em;
+        color: #667eea;
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+    .quote-demo::after {
+        content: ' \2014 CSS Specification';
+        display: block;
+        font-size: 0.78em;
+        color: #9ca3af;
+        font-style: normal;
+        margin-top: 8px;
+        font-weight: 600;
+    }
+
+    /* Tooltip via ::after */
+    .has-tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: help;
+        background: #667eea;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+    .has-tooltip::after {
+        content: attr(data-tip);
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%) scale(0.85);
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 0.8em;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    .has-tooltip:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+
+    /* Gradient underline */
+    .grad-link {
+        text-decoration: none;
+        color: #1f2937;
+        font-weight: 600;
+        font-size: 1.05em;
+        display: inline-block;
+        position: relative;
+        padding-bottom: 2px;
+    }
+    .grad-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 0; height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: width 0.3s ease;
+    }
+    .grad-link:hover::after { width: 100%; }
+
+    /* :is() and :not() demo list */
+    .styled-list { list-style: none; padding: 0; }
+    .styled-list li { padding: 10px 16px; border-bottom: 1px solid #e5e7eb; color: #374151; }
+    .styled-list li:not(:last-child) { border-bottom: 1px solid #e5e7eb; }
+    .styled-list li:last-child { border-bottom: none; border-radius: 0 0 8px 8px; }
+    .styled-list li:is(.featured) { background: #eef2ff; font-weight: 700; color: #4338ca; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+
+    .course-complete { background: linear-gradient(135deg, #059669 0%, #065f46 100%); border-radius: 12px; padding: 32px; margin: 2em 0; text-align: center; color: white; }
+    .course-complete h2 { color: white; border: none; margin: 0 0 12px; font-size: 1.6em; }
+    .course-complete p { color: rgba(255,255,255,0.9); margin: 0; }
+
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Pseudo-classes, Pseudo-elements &amp; Advanced Selectors</h1>
+
+    <div class="intro-text">
+        Pseudo-classes and pseudo-elements let you style elements based on their state, position, or content — without adding extra HTML or JavaScript. Mastering them unlocks tooltips, decorative elements, zebra-striped tables, dynamic form feedback, and much more — entirely in CSS.
+    </div>
+
+    <h2>Pseudo-classes</h2>
+    <p>A pseudo-class selects an element in a particular <em>state</em>. They use a single colon: <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">:hover</code>, <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">:focus</code>, etc.</p>
+
+    <h3>User Interaction States</h3>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Interaction Pseudo-classes</div>
+        <code><span class="selector">a:link</span>    { <span class="property">color</span>: <span class="value">#667eea</span>; }     <span class="comment">/* unvisited link */</span>
+<span class="selector">a:visited</span> { <span class="property">color</span>: <span class="value">#764ba2</span>; }     <span class="comment">/* visited link */</span>
+<span class="selector">a:hover</span>   { <span class="property">color</span>: <span class="value">#4f46e5</span>; }     <span class="comment">/* pointer over */</span>
+<span class="selector">a:active</span>  { <span class="property">color</span>: <span class="value">#ef4444</span>; }     <span class="comment">/* being clicked */</span>
+
+<span class="comment">/* :focus — keyboard / programmatic focus */</span>
+<span class="selector">input:focus</span> {
+    <span class="property">border-color</span>: <span class="value">#667eea</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 0 0 3px rgba(102,126,234,0.3)</span>;
+}
+
+<span class="comment">/* :focus-visible — only shows ring for keyboard navigation */</span>
+<span class="selector">button:focus-visible</span> {
+    <span class="property">outline</span>: <span class="value">3px solid #667eea</span>;
+    <span class="property">outline-offset</span>: <span class="value">3px</span>;
+}
+
+<span class="comment">/* :disabled / :checked */</span>
+<span class="selector">input:disabled</span> { <span class="property">opacity</span>: <span class="value">0.5</span>; <span class="property">cursor</span>: <span class="value">not-allowed</span>; }
+<span class="selector">input:checked + label</span> { <span class="property">color</span>: <span class="value">#667eea</span>; }</code>
+    </div>
+
+    <div class="demo-row">
+        <span class="demo-label-full">Live demos — hover, focus, and click each element</span>
+        <a class="link-demo" href="#">Link states (:link :visited :hover)</a>
+        <button class="btn-focus">Button (:hover :focus-visible :active)</button>
+        <span class="has-tooltip" data-tip="I'm a CSS-only tooltip!">Hover for tooltip</span>
+        <a class="grad-link" href="#">Gradient underline (:hover)</a>
+    </div>
+
+    <h3>Structural Pseudo-classes</h3>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Structural Pseudo-classes</div>
+        <code><span class="selector">li:first-child</span>    { <span class="property">border-radius</span>: <span class="value">8px 8px 0 0</span>; }
+<span class="selector">li:last-child</span>     { <span class="property">border-radius</span>: <span class="value">0 0 8px 8px</span>; }
+<span class="selector">li:nth-child(odd)</span>  { <span class="property">background</span>: <span class="value">#ede9fe</span>; }
+<span class="selector">li:nth-child(even)</span> { <span class="property">background</span>: <span class="value">#f3f4f6</span>; }
+
+<span class="comment">/* nth-child formula: An+B */</span>
+<span class="selector">li:nth-child(3n)</span>   { <span class="property">font-weight</span>: <span class="value">bold</span>; } <span class="comment">/* every 3rd */</span>
+<span class="selector">li:nth-child(-n+3)</span> { <span class="property">color</span>: <span class="value">#ef4444</span>; }   <span class="comment">/* first 3 only */</span>
+
+<span class="comment">/* :only-child, :empty */</span>
+<span class="selector">p:only-child</span> { <span class="property">font-size</span>: <span class="value">1.2em</span>; }
+<span class="selector">div:empty</span>    { <span class="property">display</span>: <span class="value">none</span>; }</code>
+    </div>
+
+    <div class="demo-row">
+        <span class="demo-label-full">:nth-child(odd/even) — zebra stripe pattern</span>
+        <ul class="nth-list" style="width:100%;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+            <li>Row 1 — :first-child + :nth-child(odd)</li>
+            <li>Row 2 — :nth-child(even)</li>
+            <li>Row 3 — :nth-child(odd)</li>
+            <li>Row 4 — :nth-child(even)</li>
+            <li>Row 5 — :last-child + :nth-child(odd)</li>
+        </ul>
+    </div>
+
+    <h3>Form &amp; Input States</h3>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Form Pseudo-classes</div>
+        <code><span class="selector">input:valid</span>   { <span class="property">border-color</span>: <span class="value">#10b981</span>; }
+<span class="selector">input:invalid</span> { <span class="property">border-color</span>: <span class="value">#ef4444</span>; }
+<span class="selector">input:required</span>{ <span class="property">border-left</span>: <span class="value">3px solid #f59e0b</span>; }
+
+<span class="comment">/* :placeholder-shown — no value typed yet */</span>
+<span class="selector">input:placeholder-shown + label</span> {
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+}
+
+<span class="comment">/* :has() — style parent based on child state (modern CSS) */</span>
+<span class="selector">label:has(input:checked)</span> {
+    <span class="property">background</span>: <span class="value">#eef2ff</span>;
+    <span class="property">border-color</span>: <span class="value">#667eea</span>;
+}</code>
+    </div>
+
+    <div class="demo-row">
+        <span class="demo-label-full">:has() — label responds to its checkbox being checked</span>
+        <div class="check-demo" style="width:100%">
+            <label class="check-label"><input type="checkbox"> Option A — click to check</label>
+            <label class="check-label"><input type="checkbox" checked> Option B — already checked</label>
+            <label class="check-label"><input type="checkbox"> Option C — try me</label>
+        </div>
+    </div>
+
+    <h2>Pseudo-elements</h2>
+    <p>Pseudo-elements use <strong>double colons</strong> (<code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">::</code>) and create virtual elements in the DOM — no extra HTML needed.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Pseudo-elements</div>
+        <code><span class="comment">/* ::before and ::after insert generated content */</span>
+<span class="selector">.blockquote::before</span> {
+    <span class="property">content</span>: <span class="value">'\201C'</span>;     <span class="comment">/* Unicode " character */</span>
+    <span class="property">font-size</span>: <span class="value">3em</span>;
+    <span class="property">color</span>: <span class="value">#667eea</span>;
+    <span class="property">position</span>: <span class="value">absolute</span>;
+    <span class="property">left</span>: <span class="value">16px</span>;
+}
+
+<span class="comment">/* content can use attr() to pull HTML attributes */</span>
+<span class="selector">[data-tip]::after</span> {
+    <span class="property">content</span>: <span class="value">attr(data-tip)</span>;
+    <span class="comment">/* ... position as tooltip ... */</span>
+}
+
+<span class="comment">/* ::first-line, ::first-letter */</span>
+<span class="selector">article p::first-letter</span> {
+    <span class="property">font-size</span>: <span class="value">3em</span>;
+    <span class="property">float</span>: <span class="value">left</span>;
+    <span class="property">line-height</span>: <span class="value">0.8</span>;
+    <span class="property">margin-right</span>: <span class="value">8px</span>;
+}
+
+<span class="comment">/* ::selection — custom text highlight */</span>
+<span class="selector">::selection</span> {
+    <span class="property">background</span>: <span class="value">#667eea</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+}
+
+<span class="comment">/* ::placeholder */</span>
+<span class="selector">input::placeholder</span> { <span class="property">color</span>: <span class="value">#9ca3af</span>; <span class="property">font-style</span>: <span class="value">italic</span>; }</code>
+    </div>
+
+    <div class="quote-demo">
+        Generated content via ::before and ::after — no HTML tags needed for the quotation mark or attribution.
+    </div>
+
+    <h2>Advanced Modern Selectors</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — :is(), :where(), :not(), :has()</div>
+        <code><span class="comment">/* :is() — match any in a list (takes highest specificity) */</span>
+<span class="selector">:is(h1, h2, h3)</span> {
+    <span class="property">font-family</span>: <span class="value">Georgia, serif</span>;
+}
+
+<span class="comment">/* :is() with descendant — DRY selectors */</span>
+<span class="selector">:is(section, article) h2</span> {
+    <span class="property">color</span>: <span class="value">#667eea</span>;
+}
+
+<span class="comment">/* :where() — same as :is() but specificity is always 0 */</span>
+<span class="selector">:where(h1, h2, h3)</span> {
+    <span class="property">line-height</span>: <span class="value">1.3</span>;
+}
+
+<span class="comment">/* :not() — exclude elements */</span>
+<span class="selector">li:not(:last-child)</span> {
+    <span class="property">border-bottom</span>: <span class="value">1px solid #e5e7eb</span>;
+}
+
+<span class="selector">input:not([type="submit"]):not([type="checkbox"])</span> {
+    <span class="property">border</span>: <span class="value">2px solid #d1d5db</span>;
+}
+
+<span class="comment">/* :has() — parent selector, selects based on children */</span>
+<span class="selector">.card:has(img)</span> {
+    <span class="property">padding-top</span>: <span class="value">0</span>;  <span class="comment">/* card has an image — remove top padding */</span>
+}
+<span class="selector">figure:has(figcaption)</span> {
+    <span class="property">border</span>: <span class="value">1px solid #e5e7eb</span>;
+}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+                <tr><th>Selector</th><th>Selects</th><th>Browser Support</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>:hover</code></td><td>Element the pointer is over</td><td>All</td></tr>
+                <tr><td><code>:focus-visible</code></td><td>Keyboard-focused element only</td><td>All modern</td></tr>
+                <tr><td><code>:nth-child()</code></td><td>Element at position (formula)</td><td>All</td></tr>
+                <tr><td><code>:is()</code></td><td>Any element matching list</td><td>All modern</td></tr>
+                <tr><td><code>:not()</code></td><td>Element that doesn't match</td><td>All</td></tr>
+                <tr><td><code>:has()</code></td><td>Parent containing matching child</td><td>All modern (2023+)</td></tr>
+                <tr><td><code>::before</code></td><td>Virtual first child</td><td>All</td></tr>
+                <tr><td><code>::after</code></td><td>Virtual last child</td><td>All</td></tr>
+                <tr><td><code>::selection</code></td><td>User-selected text</td><td>All</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">The content Property is Required for ::before / ::after</div>
+        <p>Even if you don't want text, you must include <code style="background:#fff;padding:2px 6px;border-radius:3px;">content: ""</code>. Without it, the pseudo-element is not rendered. Use it with <code>display: block</code> or <code>display: flex</code> to create decorative shapes and overlays.</p>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">Don't Put Meaningful Content in ::before / ::after</div>
+        <p>Screen readers may or may not read generated content. Never use pseudo-elements to render text that is essential for understanding — use real HTML for that. Pseudo-elements are for decoration only.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up This Topic</h2>
+        <p>Pseudo-classes give you state-aware styling — hover, focus, checked, nth-child — without any JavaScript. Pseudo-elements give you virtual DOM nodes for decorative elements, tooltips, and overlays. Together they let you write incredibly expressive styles with minimal HTML.</p>
+    </div>
+
+    <div class="course-complete">
+        <h2>Course Complete!</h2>
+        <p>You have completed all 10 topics of <strong>Web Development with CSS</strong>. You have covered selectors, the box model, colors and typography, display and positioning, Flexbox, Grid, transitions, animations, responsive design, CSS variables, pseudo-classes, and pseudo-elements — the full CSS toolkit for building modern, beautiful web pages.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>

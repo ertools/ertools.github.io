@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 3: Colors &amp; Typography</title>
+<style>
+    .post-content {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.8; color: #2c3e50; max-width: 860px; margin: 0 auto; padding: 40px 24px;
+    }
+    .post-content h1 { color: #1a202c; font-size: 2.2em; font-weight: 800; margin: 0 0 0.4em; line-height: 1.2; }
+    .post-content h2 { color: #2c3e50; font-size: 1.8em; font-weight: 700; margin: 2em 0 1em; padding-bottom: 0.5em; border-bottom: 3px solid #667eea; }
+    .post-content h3 { color: #34495e; font-size: 1.4em; font-weight: 600; margin: 1.8em 0 1em; }
+    .intro-text { font-size: 1.15em; color: #555; background: #f8f9fa; padding: 20px; border-left: 4px solid #667eea; margin: 1.5em 0; border-radius: 0 8px 8px 0; }
+    .code-container { background: #1e293b; border-radius: 8px; padding: 20px; margin: 1.5em 0; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .code-header { color: #94a3b8; font-size: 0.85em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; }
+    .code-container code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; line-height: 1.6; color: #e2e8f0; display: block; white-space: pre; }
+    .selector { color: #fbbf24; }
+    .property { color: #60a5fa; }
+    .value { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .tip-box  { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 1.5em 0; }
+    .box-title { font-weight: 700; font-size: 1.1em; margin-bottom: 10px; color: #1f2937; }
+    .info-box p, .tip-box p, .warning-box p { margin: 0; color: #374151; }
+    .post-content ul, .post-content ol { margin: 1.5em 0; padding-left: 2em; }
+    .post-content li { margin-bottom: 0.8em; color: #4b5563; }
+    .post-content p { margin-bottom: 1.2em; color: #4b5563; }
+    .post-content strong { color: #1f2937; font-weight: 600; }
+    .table-responsive { overflow-x: auto; margin: 1.5em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .styled-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.95em; }
+    .styled-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    .styled-table th { padding: 15px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
+    .styled-table td { padding: 15px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
+    .styled-table tbody tr:hover { background: #f9fafb; }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+    .styled-table code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; color: #dc2626; }
+
+    /* Color swatches */
+    .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 1.5em 0; }
+    .color-swatch { border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+    .swatch-body { height: 70px; }
+    .swatch-info { background: white; padding: 10px 12px; }
+    .swatch-name { font-weight: 700; font-size: 0.85em; color: #1f2937; display: block; }
+    .swatch-code { font-family: 'Courier New', monospace; font-size: 0.78em; color: #6b7280; }
+
+    /* Typography demo */
+    .type-demo { background: #f9fafb; border-radius: 10px; padding: 28px; margin: 1.5em 0; border: 1px solid #e5e7eb; }
+    .type-demo p { margin: 0 0 12px; }
+    .type-xl { font-size: 2em; font-weight: 800; color: #1a202c; line-height: 1.2; }
+    .type-lg { font-size: 1.4em; font-weight: 600; color: #374151; }
+    .type-base { font-size: 1em; color: #4b5563; }
+    .type-sm { font-size: 0.85em; color: #9ca3af; letter-spacing: 0.03em; }
+    .type-mono { font-family: 'Courier New', monospace; font-size: 0.9em; color: #dc2626; background: #fef2f2; padding: 4px 8px; border-radius: 4px; }
+
+    .conclusion-box { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-radius: 8px; padding: 25px; margin: 2em 0; }
+    .conclusion-box h2 { margin-top: 0; border: none; color: #6b21a8; }
+    .conclusion-box p { color: #581c87; }
+    @media (max-width: 768px) {
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .code-container { padding: 15px; font-size: 0.9em; }
+        .color-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    body {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body>
+<div class="post-content">
+
+    <h1>Colors &amp; Typography</h1>
+
+    <div class="intro-text">
+        Color and type are the two most visible design decisions on any web page. CSS gives you powerful, flexible tools for both — from modern color formats like HSL and OKLCH to fluid typography with clamp(). Get these right, and your pages will look polished and professional.
+    </div>
+
+    <h2>CSS Color Formats</h2>
+
+    <div class="color-grid">
+        <div class="color-swatch">
+            <div class="swatch-body" style="background:#667eea;"></div>
+            <div class="swatch-info"><span class="swatch-name">Hex</span><span class="swatch-code">#667eea</span></div>
+        </div>
+        <div class="color-swatch">
+            <div class="swatch-body" style="background:rgb(102,126,234);"></div>
+            <div class="swatch-info"><span class="swatch-name">RGB</span><span class="swatch-code">rgb(102,126,234)</span></div>
+        </div>
+        <div class="color-swatch">
+            <div class="swatch-body" style="background:hsl(232,76%,66%);"></div>
+            <div class="swatch-info"><span class="swatch-name">HSL</span><span class="swatch-code">hsl(232,76%,66%)</span></div>
+        </div>
+        <div class="color-swatch">
+            <div class="swatch-body" style="background:rgba(102,126,234,0.5);"></div>
+            <div class="swatch-info"><span class="swatch-name">RGBA</span><span class="swatch-code">rgba(…,0.5)</span></div>
+        </div>
+        <div class="color-swatch">
+            <div class="swatch-body" style="background:linear-gradient(135deg,#667eea,#764ba2);"></div>
+            <div class="swatch-info"><span class="swatch-name">Gradient</span><span class="swatch-code">linear-gradient(…)</span></div>
+        </div>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Color Formats</div>
+        <code><span class="selector">.element</span> {
+    <span class="comment">/* Hex (3 or 6 digits) */</span>
+    <span class="property">color</span>: <span class="value">#ff6b6b</span>;         <span class="comment">/* opaque */</span>
+    <span class="property">color</span>: <span class="value">#ff6b6b80</span>;       <span class="comment">/* hex with alpha channel */</span>
+
+    <span class="comment">/* RGB / RGBA */</span>
+    <span class="property">background</span>: <span class="value">rgb(102 126 234)</span>;             <span class="comment">/* modern syntax */</span>
+    <span class="property">background</span>: <span class="value">rgb(102 126 234 / 50%)</span>;        <span class="comment">/* with alpha */</span>
+
+    <span class="comment">/* HSL — most intuitive for designers */</span>
+    <span class="property">color</span>: <span class="value">hsl(232 76% 66%)</span>;                  <span class="comment">/* hue saturation lightness */</span>
+    <span class="property">color</span>: <span class="value">hsl(232 76% 66% / 0.8)</span>;            <span class="comment">/* with alpha */</span>
+
+    <span class="comment">/* Named colors */</span>
+    <span class="property">border-color</span>: <span class="value">currentColor</span>;               <span class="comment">/* inherits text color */</span>
+    <span class="property">background</span>: <span class="value">transparent</span>;
+}</code>
+    </div>
+
+    <div class="tip-box">
+        <div class="box-title">Why HSL is Great for Design</div>
+        <p>HSL (Hue, Saturation, Lightness) makes it easy to create color variations. Want a darker shade? Lower the lightness. Want a muted tone? Lower the saturation. <code style="background:#fff;padding:2px 6px;border-radius:3px;">hsl(232 76% 66%)</code> → lighter: <code style="background:#fff;padding:2px 6px;border-radius:3px;">hsl(232 76% 80%)</code> → darker: <code style="background:#fff;padding:2px 6px;border-radius:3px;">hsl(232 76% 40%)</code>.</p>
+    </div>
+
+    <h2>Gradients</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Gradients</div>
+        <code><span class="comment">/* Linear gradient — direction, then color stops */</span>
+<span class="selector">.hero</span> {
+    <span class="property">background</span>: <span class="value">linear-gradient(135deg, #667eea 0%, #764ba2 100%)</span>;
+}
+
+<span class="comment">/* Radial gradient */</span>
+<span class="selector">.spotlight</span> {
+    <span class="property">background</span>: <span class="value">radial-gradient(circle at center, #fbbf24 0%, #ef4444 100%)</span>;
+}
+
+<span class="comment">/* Multi-stop gradient */</span>
+<span class="selector">.rainbow</span> {
+    <span class="property">background</span>: <span class="value">linear-gradient(90deg, #f43f5e, #fb923c, #facc15, #4ade80, #60a5fa, #a78bfa)</span>;
+}
+
+<span class="comment">/* Gradient text (with clip) */</span>
+<span class="selector">.gradient-text</span> {
+    <span class="property">background</span>: <span class="value">linear-gradient(135deg, #667eea, #764ba2)</span>;
+    <span class="property">-webkit-background-clip</span>: <span class="value">text</span>;
+    <span class="property">-webkit-text-fill-color</span>: <span class="value">transparent</span>;
+    <span class="property">background-clip</span>: <span class="value">text</span>;
+}</code>
+    </div>
+
+    <h2>Typography — Font Properties</h2>
+
+    <div class="type-demo">
+        <p class="type-xl">Display Heading — 800 weight</p>
+        <p class="type-lg">Section Heading — 600 weight</p>
+        <p class="type-base">Body text at 1em, comfortable line-height, normal weight. This is where most of your content lives.</p>
+        <p class="type-sm">CAPTION / LABEL — UPPERCASE TRACKING</p>
+        <p><span class="type-mono">monospace code snippet</span></p>
+    </div>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Font Properties</div>
+        <code><span class="selector">body</span> {
+    <span class="property">font-family</span>: <span class="value">-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif</span>;
+    <span class="property">font-size</span>: <span class="value">16px</span>;      <span class="comment">/* base size */</span>
+    <span class="property">line-height</span>: <span class="value">1.6</span>;    <span class="comment">/* unitless — relative to font-size */</span>
+    <span class="property">color</span>: <span class="value">#374151</span>;
+}
+
+<span class="selector">h1</span> {
+    <span class="property">font-size</span>: <span class="value">2.5em</span>;    <span class="comment">/* relative to parent font-size */</span>
+    <span class="property">font-weight</span>: <span class="value">800</span>;    <span class="comment">/* 100–900 */</span>
+    <span class="property">letter-spacing</span>: <span class="value">-0.02em</span>;
+    <span class="property">line-height</span>: <span class="value">1.2</span>;
+}
+
+<span class="selector">.label</span> {
+    <span class="property">font-size</span>: <span class="value">0.75rem</span>;  <span class="comment">/* rem = relative to root (html) font-size */</span>
+    <span class="property">font-weight</span>: <span class="value">600</span>;
+    <span class="property">text-transform</span>: <span class="value">uppercase</span>;
+    <span class="property">letter-spacing</span>: <span class="value">0.08em</span>;
+    <span class="property">color</span>: <span class="value">#6b7280</span>;
+}</code>
+    </div>
+
+    <h2>Text Properties</h2>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Text Styling</div>
+        <code><span class="selector">.article p</span> {
+    <span class="property">text-align</span>: <span class="value">left</span>;          <span class="comment">/* left | right | center | justify */</span>
+    <span class="property">text-indent</span>: <span class="value">1.5em</span>;       <span class="comment">/* indent first line */</span>
+    <span class="property">text-decoration</span>: <span class="value">none</span>;    <span class="comment">/* underline | line-through | overline */</span>
+}
+
+<span class="selector">a</span> {
+    <span class="property">text-decoration</span>: <span class="value">underline</span>;
+    <span class="property">text-decoration-color</span>: <span class="value">rgba(102,126,234,0.4)</span>;
+    <span class="property">text-underline-offset</span>: <span class="value">3px</span>;
+}
+
+<span class="selector">.truncate</span> {
+    <span class="property">white-space</span>: <span class="value">nowrap</span>;
+    <span class="property">overflow</span>: <span class="value">hidden</span>;
+    <span class="property">text-overflow</span>: <span class="value">ellipsis</span>;  <span class="comment">/* shows "…" */</span>
+}
+
+<span class="comment">/* Multi-line clamp */</span>
+<span class="selector">.clamp</span> {
+    <span class="property">display</span>: <span class="value">-webkit-box</span>;
+    <span class="property">-webkit-line-clamp</span>: <span class="value">3</span>;
+    <span class="property">-webkit-box-orient</span>: <span class="value">vertical</span>;
+    <span class="property">overflow</span>: <span class="value">hidden</span>;
+}</code>
+    </div>
+
+    <h2>Google Fonts &amp; Custom Fonts</h2>
+
+    <div class="code-container">
+        <div class="code-header">HTML + CSS — Loading Custom Fonts</div>
+        <code><span class="comment">&lt;!-- In &lt;head&gt; --&gt;</span>
+&lt;<span class="tag">link</span> <span class="attr">rel</span>="preconnect" <span class="attr">href</span>="https://fonts.googleapis.com"&gt;
+&lt;<span class="tag">link</span> <span class="attr">href</span>="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" <span class="attr">rel</span>="stylesheet"&gt;
+
+<span class="comment">/* In CSS */</span>
+<span class="selector">body</span> {
+    <span class="property">font-family</span>: <span class="value">'Inter', sans-serif</span>;
+}
+
+<span class="comment">/* Or use @font-face for self-hosted */</span>
+<span class="selector">@font-face</span> {
+    <span class="property">font-family</span>: <span class="value">'MyFont'</span>;
+    <span class="property">src</span>: <span class="value">url('fonts/myfont.woff2') format('woff2')</span>;
+    <span class="property">font-weight</span>: <span class="value">400 700</span>;   <span class="comment">/* variable font range */</span>
+    <span class="property">font-display</span>: <span class="value">swap</span>;
+}</code>
+    </div>
+
+    <h2>Fluid Typography with clamp()</h2>
+    <p><code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;color:#dc2626;">clamp(min, preferred, max)</code> lets font sizes scale smoothly between a minimum and maximum value based on viewport width — no media queries needed.</p>
+
+    <div class="code-container">
+        <div class="code-header">CSS — Fluid Font Sizes</div>
+        <code><span class="selector">h1</span> {
+    <span class="comment">/* Minimum 1.8rem, scales with viewport, maximum 3rem */</span>
+    <span class="property">font-size</span>: <span class="value">clamp(1.8rem, 5vw, 3rem)</span>;
+}
+
+<span class="selector">p</span> {
+    <span class="property">font-size</span>: <span class="value">clamp(1rem, 2.5vw, 1.25rem)</span>;
+}
+
+<span class="comment">/* Fluid line-height */</span>
+<span class="selector">body</span> {
+    <span class="property">line-height</span>: <span class="value">clamp(1.4, 1.2 + 0.5vw, 1.8)</span>;
+}</code>
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">CSS Units for Typography</div>
+        <p>Use <strong>rem</strong> for font sizes (scales with the root element, respects user accessibility settings), <strong>em</strong> for spacing relative to the current font size, and <strong>px</strong> sparingly — only when you truly need a fixed size.</p>
+    </div>
+
+    <div class="conclusion-box">
+        <h2>Wrapping Up</h2>
+        <p>CSS gives you a rich color vocabulary — named colors, hex, RGB, HSL, and gradients — plus fine-grained control over every aspect of typography. Combining HSL colors, system font stacks, and fluid <code>clamp()</code> sizes produces accessible, responsive designs with very little code.</p>
+        <p>Next: <strong>Display &amp; Positioning</strong> — controlling exactly where elements appear on the page.</p>
+    </div>
+
+
+</div>
+<script>
+    document.addEventListener('copy', function(e) { e.preventDefault(); });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+</body>
+</html>
